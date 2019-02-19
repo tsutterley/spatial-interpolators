@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 compact_radial_basis.py
-Written by Tyler Sutterley (09/2017)
+Written by Tyler Sutterley (02/2019)
 
 Interpolates a sparse grid using compactly supported radial basis functions
 	of minimal degree (Wendland functions) and sparse matrix algebra
@@ -48,6 +48,7 @@ REFERENCES:
 		Applied and Computational Mathematics, 2003.
 
 UPDATE HISTORY:
+	Updated 02/2019: compatibility updates for python3
 	Updated 09/2017: using rcond=-1 in numpy least-squares algorithms
 	Updated 08/2016: using format text within ValueError, edit constant vector
 		removed 3 dimensional option of radial basis (spherical)
@@ -62,6 +63,7 @@ UPDATE HISTORY:
 from __future__ import print_function, division
 import numpy as np
 import scipy.sparse
+import scipy.sparse.linalg
 import scipy.spatial
 
 def compact_radial_basis(xs, ys, zs, XI, YI, dimension, order, smooth=0.,
@@ -96,10 +98,10 @@ def compact_radial_basis(xs, ys, zs, XI, YI, dimension, order, smooth=0.,
 		raise ValueError("Method {0} not implemented".format(method))
 
 	#-- construct kd-tree for Data points
-	kdtree = scipy.spatial.cKDTree(zip(xs, ys))
+	kdtree = scipy.spatial.cKDTree(list(zip(xs, ys)))
 	if radius is None:
 		#-- quick nearest-neighbor lookup to calculate mean radius
-		ds,_ = kdtree.query(zip(xs, ys), k=2)
+		ds,_ = kdtree.query(list(zip(xs, ys)), k=2)
 		radius = 2.0*np.mean(ds[:, 1])
 
 	#-- Creation of data-data distance sparse matrix in COOrdinate format
@@ -123,7 +125,7 @@ def compact_radial_basis(xs, ys, zs, XI, YI, dimension, order, smooth=0.,
 
 	#-- construct kd-tree for Mesh points
 	#-- Data to Mesh Points
-	mkdtree = scipy.spatial.cKDTree(zip(XI.flatten(),YI.flatten()))
+	mkdtree = scipy.spatial.cKDTree(list(zip(XI.flatten(),YI.flatten())))
 	#-- Creation of data-mesh distance sparse matrix in COOrdinate format
 	Re = kdtree.sparse_distance_matrix(mkdtree,radius,output_type='coo_matrix')
 	#-- calculate ratio between data-mesh distance and radius

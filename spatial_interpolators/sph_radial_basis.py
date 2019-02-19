@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 sph_radial_basis.py
-Written by Tyler Sutterley (09/2017)
+Written by Tyler Sutterley (02/2019)
 
 Interpolates a sparse grid over a sphere using radial basis functions with
 	QR factorization option to eliminate ill-conditioning (Fornberg, 2007)
@@ -47,6 +47,7 @@ REFERENCES:
 		Radial Basis Functions." SIAM J. Sci. Comput. 33(2), 869-892 (2011)
 
 UPDATE HISTORY:
+	Updated 02/2019: compatibility updates for python3
 	Updated 09/2017: using rcond=-1 in numpy least-squares algorithms
 	Updated 08/2016: finished QR factorization method, added norm option
 	Forked 08/2016 from radial_basis.py for use over a sphere
@@ -63,7 +64,7 @@ UPDATE HISTORY:
 from __future__ import print_function, division
 import numpy as np
 import scipy.special
-from legendre import legendre
+from spatial_interpolators.legendre import legendre
 
 def sph_radial_basis(lon, lat, data, LONGITUDE, LATITUDE, smooth=0.,
 	epsilon=None, method='inverse', QR=False, norm='Euclidean'):
@@ -268,9 +269,9 @@ def distance_matrix(x,cntrs):
 	s,M = np.shape(x)
 	s,N = np.shape(cntrs)
 	#-- decompose Euclidean distance: (x-y)^2 = x^2 - 2xy + y^2
-	dx2 = np.kron(np.ones((1,N)), np.sum(x * x, axis=0)[:,np.newaxis])
-	dxy = 2.0*np.dot(x.transpose(), cntrs)
-	dy2 = np.kron(np.ones((M,1)), np.sum(cntrs * cntrs, axis=0))
+	dx2=np.kron(np.ones((1,N)), np.sum(x * x, axis=0)[:,np.newaxis]).astype('f')
+	dxy=2.0*np.dot(x.transpose(), cntrs).astype('f')
+	dy2=np.kron(np.ones((M,1)), np.sum(cntrs * cntrs, axis=0)).astype('f')
 	D = np.sqrt(dx2 - dxy + dy2)
 	return D
 

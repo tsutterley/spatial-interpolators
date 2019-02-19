@@ -74,9 +74,11 @@ def main():
 
 	#-- Interpolating with griddata (linear, nearest, cubic)
 	#-- interpolation points
-	interp_points = zip(XI.flatten(), YI.flatten())
-	# linear_output = scipy.interpolate.griddata(zip(X, Y), Z, interp_points, method='linear')
-	cubic_output = scipy.interpolate.griddata(zip(X, Y), Z, interp_points, method='cubic')
+	interp_points = list(zip(XI.flatten(), YI.flatten()))
+	# linear_output = scipy.interpolate.griddata(list(zip(X, Y)), Z,
+	# 	interp_points, method='linear')
+	cubic_output = scipy.interpolate.griddata(list(zip(X, Y)), Z,
+		interp_points, method='cubic')
 	#-- interpolated data grid
 	# linear = linear_output.reshape(ny,nx)
 	cubic = cubic_output.reshape(ny,nx)
