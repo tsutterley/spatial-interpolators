@@ -3,7 +3,7 @@ from setuptools.extension import Extension
 from Cython.Distutils import build_ext
 setup(
 	name='spatial-interpolators',
-	version='1.0.0.1',
+	version='1.0.0.2',
 	description='Spatial interpolation tools for Python',
 	url='https://github.com/tsutterley/spatial-interpolators',
 	author='Tyler Sutterley',

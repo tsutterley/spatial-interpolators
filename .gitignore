@@ -30,6 +30,7 @@
 *.gmtdefaults4
 .RData
 .Rhistory
+*-checkpoint.ipynb
 
 # OS generated files #
 ######################
