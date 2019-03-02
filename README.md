@@ -40,11 +40,11 @@ Evaluates Shepard interpolants to 2D data based on inverse distance weighting.
 ##### `sph_bilinear.py`
 Spherical interpolation routine for gridded data using bilinear interpolation.  
 
-##### `interpolate_franke.py`
-Test program for visualizing the different Cartesian interpolators
+##### `interpolate_franke.ipynb`
+Test notebook for visualizing the different Cartesian interpolators
 
-##### `interpolate_sphere.py`
-Test program for visualizing the different spherical interpolators
+##### `interpolate_sphere.ipynb`
+Test notebook for visualizing the different spherical interpolators
 
 #### Dependencies
  - [numpy: Scientific Computing Tools For Python](http://www.numpy.org)  
