@@ -9,7 +9,8 @@
 *.pyc
 *.m~
 *.m~~
- 
+PvQv_C.c
+
 # Packages #
 ############
 *.7z

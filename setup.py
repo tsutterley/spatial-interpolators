@@ -7,7 +7,7 @@ setup(
 	description='Spatial interpolation tools for Python',
 	url='https://github.com/tsutterley/spatial-interpolators',
 	author='Tyler Sutterley',
-	author_email='tyler.c.sutterley@nasa.gov',
+	author_email='tsutterl@uw.edu',
 	license='MIT',
 	classifiers=[
 		'Development Status :: 3 - Alpha',
