@@ -1,6 +1,11 @@
 spatial-interpolators
 =====================
 
+[![Language](https://img.shields.io/badge/python-v3.7-green.svg)](https://www.python.org/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/tsutterley/spatial-interpolators/blob/master/LICENSE)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/tsutterley/spatial-interpolators/master)
+[![Binder](https://binder.pangeo.io/badge.svg)](https://binder.pangeo.io/v2/gh/tsutterley/spatial-interpolators/master)
+
 Functions to spatially interpolate data over Cartesian and spherical grids
 
 ##### `barnes_objective.py`
@@ -47,10 +52,10 @@ Test notebook for visualizing the different Cartesian interpolators
 Test notebook for visualizing the different spherical interpolators
 
 #### Dependencies
- - [numpy: Scientific Computing Tools For Python](http://www.numpy.org)  
- - [scipy: Scientific Tools for Python](http://www.scipy.org/)  
+ - [numpy: Scientific Computing Tools For Python](https://numpy.org)  
+ - [scipy: Scientific Tools for Python](https://docs.scipy.org/doc//)  
  - [cython: C-extensions for Python](http://cython.org/)  
- - [matplotlib: Python 2D plotting library](http://matplotlib.org/)  
+ - [matplotlib: Python 2D plotting library](https://matplotlib.org/)  
 
 #### Download
 The program homepage is:   
