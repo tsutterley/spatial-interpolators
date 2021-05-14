@@ -60,8 +60,8 @@ def sph_bilinear(x, y, z, xi, yi, FLATTENED=False, FILL_VALUE=-9999.0):
             #-- calculating the indices for the original grid
             dx = (x - np.floor(xi[i]/dlon)*dlon)**2
             dy = (y - np.floor(yi[i]/dlat)*dlat)**2
-            iph, = np.nonzero(dx == np.min(dx))
-            ith, = np.nonzero(dy == np.min(dy))
+            iph = np.argmin(dx)
+            ith = np.argmin(dy)
             #-- data is within range of values
             if ((iph+1) < nx) & ((ith+1) < ny):
                 #-- corner data values for i,j
