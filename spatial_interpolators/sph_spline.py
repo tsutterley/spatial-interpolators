@@ -41,7 +41,7 @@ UPDATE HISTORY:
 """
 import numpy as np
 import scipy.special
-import PvQv_C
+from spatial_interpolators.PvQv_C import PvQv_C
 
 def sph_spline(lon, lat, data, LONGITUDE, LATITUDE, TENSION=0.):
     #-- remove singleton dimensions
@@ -163,7 +163,7 @@ def Pv(x,v):
             p = np.inf
         else:
             #-- use compiled Cython version of PvQv (PvQv_C.so from PvQv_C.pyx)
-            p,q,k = PvQv_C.PvQv(val, v)
+            p,q,k = PvQv_C(val, v)
             # p,q,k = PvQv(val, v)
         P[i] = p
     return P

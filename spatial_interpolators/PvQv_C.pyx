@@ -11,7 +11,7 @@ cdef extern from "complex.h":
 	double complex csin(double complex)
 	double complex ccos(double complex)
 
-def PvQv(double x, double complex v):
+def PvQv_C(double x, double complex v):
 	cdef unsigned iter
 	cdef double a, k
 	cdef double complex P, Q, R, K, s, c, w, X, g, u, f, t
