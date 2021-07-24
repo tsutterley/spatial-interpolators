@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 radial_basis.py
-Written by Tyler Sutterley (09/2017)
+Written by Tyler Sutterley (07/2021)
 
 Interpolates a sparse grid using radial basis functions
 
@@ -15,10 +15,13 @@ INPUTS:
     data: input data (Z variable)
     XI: scaled grid X for output ZI (or array)
     YI: scaled grid Y for output ZI (or array)
+
 OUTPUTS:
     ZI: interpolated data grid (or array)
+
 OPTIONS:
     smooth: smoothing weights
+    metric: distance metric to use (default euclidean)
     epsilon: norm input
         default is mean Euclidean distance
     polynomial: polynomial order if augmenting radial basis functions
@@ -35,6 +38,7 @@ OPTIONS:
 
 PYTHON DEPENDENCIES:
     numpy: Scientific Computing Tools For Python (https://numpy.org)
+    scipy: Scientific Tools for Python (https://docs.scipy.org/doc/)
 
 REFERENCES:
     R. L. Hardy, Multiquadric equations of topography and other irregular
@@ -43,6 +47,7 @@ REFERENCES:
         Computational Mathematics, 2003.
 
 UPDATE HISTORY:
+    Updated 07/2021: using scipy spatial distance routines
     Updated 09/2017: using rcond=-1 in numpy least-squares algorithms
     Updated 01/2017: epsilon in polyharmonic splines (linear, cubic, quintic)
     Updated 08/2016: using format text within ValueError, edit constant vector
@@ -57,9 +62,10 @@ UPDATE HISTORY:
 """
 from __future__ import print_function, division
 import numpy as np
+import scipy.spatial
 
-def radial_basis(xs, ys, zs, XI, YI, smooth=0., epsilon=None, method='inverse',
-    polynomial=None):
+def radial_basis(xs, ys, zs, XI, YI, smooth=0.0, metric='euclidean',
+    epsilon=None, method='inverse', polynomial=None):
     #-- remove singleton dimensions
     xs = np.squeeze(xs)
     ys = np.squeeze(ys)
@@ -97,7 +103,19 @@ def radial_basis(xs, ys, zs, XI, YI, smooth=0., epsilon=None, method='inverse',
 
     #-- Creation of data distance matrix
     #-- Data to Data
-    Rd = distance_matrix(np.array([xs, ys]),np.array([xs, ys]))
+    if (metric == 'brute'):
+        #-- use linear algebra to compute euclidean distances
+        Rd = distance_matrix(
+            np.array([xs, ys]),
+            np.array([xs, ys])
+            )
+    else:
+        #-- use scipy spatial distance routines
+        Rd = scipy.spatial.distance.cdist(
+            np.array([xs, ys]).T,
+            np.array([xs, ys]).T,
+            metric=metric)
+    #-- shape of distance matrix
     N,M = np.shape(Rd)
     #-- if epsilon is not specified
     if epsilon is None:
@@ -128,8 +146,19 @@ def radial_basis(xs, ys, zs, XI, YI, smooth=0., epsilon=None, method='inverse',
     w = np.linalg.lstsq(PHI,DMAT[:,np.newaxis],rcond=-1)[0]
 
     #-- Computation of distance Matrix
-    #-- Data to Mesh Points
-    Re=distance_matrix(np.array([XI.flatten(),YI.flatten()]),np.array([xs,ys]))
+    #-- Computation of distance Matrix (data to mesh points)
+    if (metric == 'brute'):
+        #-- use linear algebra to compute euclidean distances
+        Re = distance_matrix(
+            np.array([XI.flatten(),YI.flatten()]),
+            np.array([xs,ys])
+            )
+    else:
+        #-- use scipy spatial distance routines
+        Rd = scipy.spatial.distance.cdist(
+            np.array([XI.flatten(),YI.flatten()]).T,
+            np.array([xs, ys]).T,
+            metric=metric)
     #-- calculate radial basis function for data-to-mesh matrix
     E = RBF(epsilon,Re)
 

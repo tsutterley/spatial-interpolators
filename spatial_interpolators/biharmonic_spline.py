@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 biharmonic_spline.py
-Written by Tyler Sutterley (09/2017)
+Written by Tyler Sutterley (07/2021)
 
 Interpolates a sparse grid using 2D biharmonic splines (Sandwell, 1987)
 With or without tension parameters (Wessel and Bercovici, 1998)
@@ -16,12 +16,19 @@ INPUTS:
     zs: input data (Z variable)
     XI: grid X for output ZI (or array)
     YI: grid Y for output ZI (or array)
+
 OUTPUTS:
     ZI: interpolated grid (or array)
+
 OPTIONS:
+    METRIC: distance metric to use (default euclidean)
     TENSION: tension to use in interpolation (between 0 and 1)
     REGULAR: use regularized function of Mitasova and Mitas
     EPS: minimum distance value for valid points (default 1e-7)
+
+PYTHON DEPENDENCIES:
+    numpy: Scientific Computing Tools For Python (https://numpy.org)
+    scipy: Scientific Tools for Python (https://docs.scipy.org/doc/)
 
 REFERENCES:
     Sandwell, D. T. (1987), Biharmonic spline interpolation of GEOS-3 and
@@ -29,7 +36,9 @@ REFERENCES:
     Wessel and Bercovici (1998), Interpolation with Splines in Tension: A
         Green's Function Approach, Mathematical Geology, Vol. 30, No. 1.
     Mitasova and Mitas (1993), Mathematical Geology, Vol. 25, No. 6
+
 UPDATE HISTORY:
+    Updated 07/2021: using scipy spatial distance routines
     Updated 09/2017: use rcond=-1 in numpy least-squares algorithms
     Updated 08/2016: detrend input data and retrend output data. calculate c
         added regularized function of Mitasova and Mitas
@@ -37,8 +46,10 @@ UPDATE HISTORY:
     Written 06/2016
 """
 import numpy as np
+import scipy.spatial
 
-def biharmonic_spline(xs, ys, zs, XI, YI, TENSION=0, REGULAR=False, EPS=1e-7):
+def biharmonic_spline(xs, ys, zs, XI, YI, METRIC='euclidean',
+    TENSION=0, REGULAR=False, EPS=1e-7):
     #-- remove singleton dimensions
     xs = np.squeeze(xs)
     ys = np.squeeze(ys)
@@ -63,7 +74,18 @@ def biharmonic_spline(xs, ys, zs, XI, YI, TENSION=0, REGULAR=False, EPS=1e-7):
     npts = len(zs)
     GG = np.zeros((npts,npts))
     #-- Computation of distance Matrix (data to data)
-    Rd=distance_matrix(np.array([xs, ys]),np.array([xs, ys]))
+    if (METRIC == 'brute'):
+        #-- use linear algebra to compute euclidean distances
+        Rd = distance_matrix(
+            np.array([xs, ys]),
+            np.array([xs, ys])
+            )
+    else:
+        #-- use scipy spatial distance routines
+        Rd = scipy.spatial.distance.cdist(
+            np.array([xs, ys]).T,
+            np.array([xs, ys]).T,
+            metric=METRIC)
     #-- Calculate length scale for regularized case (Mitasova and Mitas)
     length_scale = np.sqrt((XI.max() - XI.min())**2 + (YI.max() - YI.min())**2)
     #-- calculate Green's function for valid points (with or without tension)
@@ -80,7 +102,18 @@ def biharmonic_spline(xs, ys, zs, XI, YI, TENSION=0, REGULAR=False, EPS=1e-7):
     m = np.linalg.lstsq(GG,z0,rcond=-1)[0]
 
     #-- Computation of distance Matrix (data to mesh points)
-    Re=distance_matrix(np.array([XI.flatten(),YI.flatten()]),np.array([xs,ys]))
+    if (METRIC == 'brute'):
+        #-- use linear algebra to compute euclidean distances
+        Re = distance_matrix(
+            np.array([XI.flatten(),YI.flatten()]),
+            np.array([xs,ys])
+            )
+    else:
+        #-- use scipy spatial distance routines
+        Rd = scipy.spatial.distance.cdist(
+            np.array([XI.flatten(),YI.flatten()]).T,
+            np.array([xs, ys]).T,
+            metric=METRIC)
     gg = np.zeros_like(Re)
     #-- calculate Green's function for valid points (with or without tension)
     ii,jj = np.nonzero(Re >= EPS)
