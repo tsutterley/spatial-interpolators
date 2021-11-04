@@ -1,7 +1,7 @@
 spatial-interpolators
 =====================
 
-[![Language](https://img.shields.io/badge/python-v3.7-green.svg)](https://www.python.org/)
+[![Language](https://img.shields.io/badge/python-v3.8-green.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/tsutterley/spatial-interpolators/blob/master/LICENSE)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/tsutterley/spatial-interpolators/master)
 [![Binder](https://binder.pangeo.io/badge.svg)](https://binder.pangeo.io/v2/gh/tsutterley/spatial-interpolators/master)
