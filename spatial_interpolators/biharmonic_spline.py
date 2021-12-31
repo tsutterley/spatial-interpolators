@@ -110,7 +110,7 @@ def biharmonic_spline(xs, ys, zs, XI, YI, METRIC='euclidean',
             )
     else:
         #-- use scipy spatial distance routines
-        Rd = scipy.spatial.distance.cdist(
+        Re = scipy.spatial.distance.cdist(
             np.array([XI.flatten(),YI.flatten()]).T,
             np.array([xs, ys]).T,
             metric=METRIC)
