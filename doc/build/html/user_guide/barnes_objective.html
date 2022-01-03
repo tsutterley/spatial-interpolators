@@ -1,0 +1,325 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+    
+        <title>barnes_objective.py &mdash; spatial-interpolators v1.0.0.4 documentation</title>
+    
+
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="biharmonic_spline.py" href="biharmonic_spline.html" />
+    <link rel="prev" title="Citation Information" href="../getting_started/Citations.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spatial-interpolators
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/Install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/Contributing.html">Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/Citations.html">Citation Information</a></li>
+</ul>
+<p><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">barnes_objective.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#calling-sequence">Calling Sequence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#keyword-arguments">Keyword arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="biharmonic_spline.html">biharmonic_spline.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compact_radial_basis.html">compact_radial_basis.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="legendre.html">legendre.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="radial_basis.html">radial_basis.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spatial.html">spatial.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shepard_interpolant.html">shepard_interpolant.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sph_bilinear.html">sph_bilinear.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sph_radial_basis.html">sph_radial_basis.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sph_spline.html">sph_spline.py</a></li>
+</ul>
+
+            
+          
+
+    
+        <p class="caption">
+            <span class="caption-text">External links</span>
+        </p>
+        <ul>
+            
+                <li class="toctree-l1"><a href="https://github.com/tsutterley/spatial-interpolators"><i class="fa fa-github fa-fw"></i> Source Code</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/tsutterley/spatial-interpolators/blob/main/LICENSE"><i class="fa fa-book fa-fw"></i> License</a></li>
+            
+        </ul>
+    
+
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spatial-interpolators</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>barnes_objective.py</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="barnes-objective-py">
+<h1>barnes_objective.py<a class="headerlink" href="#barnes-objective-py" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Optimally interpolates data using Barnes objective analysis using a successive corrections scheme <a class="reference internal" href="#barnes1994a" id="id1"><span>[Barnes1994a]</span></a> <a class="reference internal" href="#barnes1994b" id="id2"><span>[Barnes1994b]</span></a> <a class="reference internal" href="#barnes1994c" id="id3"><span>[Barnes1994c]</span></a> <a class="reference internal" href="#daley1991" id="id4"><span>[Daley1991]</span></a></p></li>
+</ul>
+<section id="calling-sequence">
+<h2>Calling Sequence<a class="headerlink" href="#calling-sequence" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">spatial_interpolators</span> <span class="k">as</span> <span class="nn">spi</span>
+<span class="n">ZI</span> <span class="o">=</span> <span class="n">spi</span><span class="o">.</span><span class="n">barnes_objective</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">zs</span><span class="p">,</span> <span class="n">XI</span><span class="p">,</span> <span class="n">YI</span><span class="p">,</span> <span class="n">XR</span><span class="p">,</span> <span class="n">YR</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://github.com/tsutterley/spatial-interpolators/blob/master/spatial_interpolators/barnes_objective.py">Source code</a></p>
+</section>
+<section id="arguments">
+<h2>Arguments<a class="headerlink" href="#arguments" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">xs</span></code>: input x-coordinates</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ys</span></code>: input y-coordinates</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zs</span></code>: input data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">XI</span></code>: output x-coordinates for data grid</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">YI</span></code>: output y-coordinates for data grid</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">XR</span></code>: x-component of Barnes smoothing length scale</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">YR</span></code>: y-component of Barnes smoothing length scale</p></li>
+</ol>
+</section>
+<section id="keyword-arguments">
+<h2>Keyword arguments<a class="headerlink" href="#keyword-arguments" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">runs</span></code>: number of iterations</p></li>
+</ul>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ZI</span></code>: interpolated data grid</p></li>
+</ul>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<dl class="citation">
+<dt class="label" id="barnes1994a"><span class="brackets"><a class="fn-backref" href="#id1">Barnes1994a</a></span></dt>
+<dd><ol class="upperalpha simple" start="19">
+<li><ol class="upperalpha simple" start="12">
+<li><p>Barnes, “Applications of the Barnes objective analysis scheme.  Part I:  Effects of undersampling, wave position, and station randomness,” <em>Journal of Atmospheric and Oceanic Technology</em>, 11(6), 1433–1448, (1994).</p></li>
+</ol>
+</li>
+</ol>
+</dd>
+<dt class="label" id="barnes1994b"><span class="brackets"><a class="fn-backref" href="#id2">Barnes1994b</a></span></dt>
+<dd><ol class="upperalpha simple" start="19">
+<li><ol class="upperalpha simple" start="12">
+<li><p>Barnes, “Applications of the Barnes objective analysis scheme.  Part II:  Improving derivative estimates,” <em>Journal of Atmospheric and Oceanic Technology</em>, 11(6), 1449–1458, (1994).</p></li>
+</ol>
+</li>
+</ol>
+</dd>
+<dt class="label" id="barnes1994c"><span class="brackets"><a class="fn-backref" href="#id3">Barnes1994c</a></span></dt>
+<dd><ol class="upperalpha simple" start="19">
+<li><ol class="upperalpha simple" start="12">
+<li><p>Barnes, “Applications of the Barnes objective analysis scheme.  Part III:  Tuning for minimum error,” <em>Journal of Atmospheric and Oceanic Technology</em>, 11(6), 1459–1479, (1994).</p></li>
+</ol>
+</li>
+</ol>
+</dd>
+<dt class="label" id="daley1991"><span class="brackets"><a class="fn-backref" href="#id4">Daley1991</a></span></dt>
+<dd><ol class="upperalpha simple" start="18">
+<li><p>Daley, <em>Atmospheric data analysis</em>, Cambridge Press, New York.  (1991).</p></li>
+</ol>
+</dd>
+</dl>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="biharmonic_spline.html" class="btn btn-neutral float-right" title="biharmonic_spline.py" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../getting_started/Citations.html" class="btn btn-neutral float-left" title="Citation Information" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2016–2022, Tyler C. Sutterley.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

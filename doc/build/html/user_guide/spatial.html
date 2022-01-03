@@ -1,0 +1,405 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+    
+        <title>spatial.py &mdash; spatial-interpolators v1.0.0.4 documentation</title>
+    
+
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="shepard_interpolant.py" href="shepard_interpolant.html" />
+    <link rel="prev" title="radial_basis.py" href="radial_basis.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spatial-interpolators
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/Install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/Contributing.html">Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/Citations.html">Citation Information</a></li>
+</ul>
+<p><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="barnes_objective.html">barnes_objective.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biharmonic_spline.html">biharmonic_spline.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compact_radial_basis.html">compact_radial_basis.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="legendre.html">legendre.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="radial_basis.html">radial_basis.py</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">spatial.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-methods">General Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="shepard_interpolant.html">shepard_interpolant.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sph_bilinear.html">sph_bilinear.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sph_radial_basis.html">sph_radial_basis.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sph_spline.html">sph_spline.py</a></li>
+</ul>
+
+            
+          
+
+    
+        <p class="caption">
+            <span class="caption-text">External links</span>
+        </p>
+        <ul>
+            
+                <li class="toctree-l1"><a href="https://github.com/tsutterley/spatial-interpolators"><i class="fa fa-github fa-fw"></i> Source Code</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/tsutterley/spatial-interpolators/blob/main/LICENSE"><i class="fa fa-book fa-fw"></i> License</a></li>
+            
+        </ul>
+    
+
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spatial-interpolators</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>spatial.py</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="spatial-py">
+<h1>spatial.py<a class="headerlink" href="#spatial-py" title="Permalink to this headline">¶</a></h1>
+<p>Utilities for operating on spatial data</p>
+<p><a class="reference external" href="https://github.com/tsutterley/spatial-interpolators/blob/master/spatial_interpolators/spatial.py">Source code</a></p>
+<section id="general-methods">
+<h2>General Methods<a class="headerlink" href="#general-methods" title="Permalink to this headline">¶</a></h2>
+<dl class="py method">
+<dt id="spatial_interpolators.spatial.data_type">
+<code class="sig-prename descclassname">spatial_interpolators.spatial.</code><code class="sig-name descname">data_type</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">t</span></em><span class="sig-paren">)</span><a class="headerlink" href="#spatial_interpolators.spatial.data_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines input data type based on variable dimensions</p>
+<p>Arguments: spatial and temporal coordinates</p>
+<p>Returns:</p>
+<blockquote>
+<div><p>string denoting input data type</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'time</span> <span class="pre">series'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'drift'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'grid'</span></code></p></li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spatial_interpolators.spatial.convert_ellipsoid">
+<code class="sig-prename descclassname">spatial_interpolators.spatial.</code><code class="sig-name descname">convert_ellipsoid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">phi1</span></em>, <em class="sig-param"><span class="n">h1</span></em>, <em class="sig-param"><span class="n">a1</span></em>, <em class="sig-param"><span class="n">f1</span></em>, <em class="sig-param"><span class="n">a2</span></em>, <em class="sig-param"><span class="n">f2</span></em>, <em class="sig-param"><span class="n">eps</span><span class="o">=</span><span class="default_value">1e-12</span></em>, <em class="sig-param"><span class="n">itmax</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="headerlink" href="#spatial_interpolators.spatial.convert_ellipsoid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert latitudes and heights to a different ellipsoid using Newton-Raphson</p>
+<p>Arguments:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">phi1</span></code>: latitude of input ellipsoid in degrees</p>
+<p><code class="docutils literal notranslate"><span class="pre">h1</span></code>: height above input ellipsoid in meters</p>
+<p><code class="docutils literal notranslate"><span class="pre">a1</span></code>: semi-major axis of input ellipsoid</p>
+<p><code class="docutils literal notranslate"><span class="pre">f1</span></code>: flattening of input ellipsoid</p>
+<p><code class="docutils literal notranslate"><span class="pre">a2</span></code>: semi-major axis of output ellipsoid</p>
+<p><code class="docutils literal notranslate"><span class="pre">f2</span></code>: flattening of output ellipsoid</p>
+</div></blockquote>
+<p>Keyword arguments:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">eps</span></code>: tolerance to prevent division by small numbers and to determine convergence</p>
+<p><code class="docutils literal notranslate"><span class="pre">itmax</span></code>: maximum number of iterations to use in Newton-Raphson</p>
+</div></blockquote>
+<p>Returns:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">phi2</span></code>: latitude of output ellipsoid in degrees</p>
+<p><code class="docutils literal notranslate"><span class="pre">h2</span></code>: height above output ellipsoid in meters</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spatial_interpolators.spatial.compute_delta_h">
+<code class="sig-prename descclassname">spatial_interpolators.spatial.</code><code class="sig-name descname">compute_delta_h</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">a1</span></em>, <em class="sig-param"><span class="n">f1</span></em>, <em class="sig-param"><span class="n">a2</span></em>, <em class="sig-param"><span class="n">f2</span></em>, <em class="sig-param"><span class="n">lat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#spatial_interpolators.spatial.compute_delta_h" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute difference in elevation for two ellipsoids at a given latitude using a simplified empirical equation</p>
+<p>Arguments:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">a1</span></code>: semi-major axis of input ellipsoid</p>
+<p><code class="docutils literal notranslate"><span class="pre">f1</span></code>: flattening of input ellipsoid</p>
+<p><code class="docutils literal notranslate"><span class="pre">a2</span></code>: semi-major axis of output ellipsoid</p>
+<p><code class="docutils literal notranslate"><span class="pre">f2</span></code>: flattening of output ellipsoid</p>
+<p><code class="docutils literal notranslate"><span class="pre">lat</span></code>: array of latitudes in degrees</p>
+</div></blockquote>
+<p>Returns:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">delta_h</span></code>: difference in elevation for two ellipsoids</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt>
+<code class="sig-name descname">spatial_interpolators.spatial.wrap_longitudes(lon):</code></dt>
+<dd><p>Wraps longitudes to range from -180 to +180</p>
+<p>Arguments:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">lon</span></code>: longitude</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spatial_interpolators.spatial.to_cartesian">
+<code class="sig-prename descclassname">spatial_interpolators.spatial.</code><code class="sig-name descname">to_cartesian</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lon</span></em>, <em class="sig-param"><span class="n">lat</span></em>, <em class="sig-param"><span class="n">a_axis</span><span class="o">=</span><span class="default_value">6378137.0</span></em>, <em class="sig-param"><span class="n">flat</span><span class="o">=</span><span class="default_value">1.0 / 298.257223563</span></em><span class="sig-paren">)</span><a class="headerlink" href="#spatial_interpolators.spatial.to_cartesian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts geodetic coordinates to Cartesian coordinates</p>
+<p>Arguments:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">lon</span></code>: longitude</p>
+<p><code class="docutils literal notranslate"><span class="pre">lat</span></code>: latitude</p>
+</div></blockquote>
+<p>Keyword arguments:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">h</span></code>: height</p>
+<p><code class="docutils literal notranslate"><span class="pre">a_axis</span></code>: semimajor axis of the ellipsoid</p>
+<p><code class="docutils literal notranslate"><span class="pre">flat</span></code>: ellipsoidal flattening</p>
+</div></blockquote>
+<p>Returns:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">z</span></code> in Cartesian coordinates</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spatial_interpolators.spatial.to_sphere">
+<code class="sig-prename descclassname">spatial_interpolators.spatial.</code><code class="sig-name descname">to_sphere</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">z</span></em><span class="sig-paren">)</span><a class="headerlink" href="#spatial_interpolators.spatial.to_sphere" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert from Cartesian coordinates to spherical coordinates</p>
+<p>Arguments:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">z</span></code> in Cartesian coordinates</p>
+</div></blockquote>
+<p>Returns:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">lon</span></code>: longitude</p>
+<p><code class="docutils literal notranslate"><span class="pre">lat</span></code>: latitude</p>
+<p><code class="docutils literal notranslate"><span class="pre">rad</span></code>: radius</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spatial_interpolators.spatial.to_geodetic">
+<code class="sig-prename descclassname">spatial_interpolators.spatial.</code><code class="sig-name descname">to_geodetic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">z</span></em>, <em class="sig-param"><span class="n">a_axis</span><span class="o">=</span><span class="default_value">6378137.0</span></em>, <em class="sig-param"><span class="n">flat</span><span class="o">=</span><span class="default_value">1.0 / 298.257223563</span></em><span class="sig-paren">)</span><a class="headerlink" href="#spatial_interpolators.spatial.to_geodetic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert from Cartesian coordinates to geodetic coordinates using <a class="reference external" href="https://arc.aiaa.org/doi/abs/10.2514/3.21016">a closed form solution</a></p>
+<p>Arguments:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">z</span></code> in Cartesian coordinates</p>
+</div></blockquote>
+<p>Keyword arguments:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">a_axis</span></code>: semimajor axis of the ellipsoid</p>
+<p><code class="docutils literal notranslate"><span class="pre">flat</span></code>: ellipsoidal flattening</p>
+</div></blockquote>
+<p>Returns:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">lon</span></code>: longitude</p>
+<p><code class="docutils literal notranslate"><span class="pre">lat</span></code>: latitude</p>
+<p><code class="docutils literal notranslate"><span class="pre">h</span></code>: height</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spatial_interpolators.spatial.scale_areas">
+<code class="sig-prename descclassname">spatial_interpolators.spatial.</code><code class="sig-name descname">scale_areas</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lat</span></em>, <em class="sig-param"><span class="n">flat</span><span class="o">=</span><span class="default_value">1.0 / 298.257223563</span></em>, <em class="sig-param"><span class="n">ref</span><span class="o">=</span><span class="default_value">70.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#spatial_interpolators.spatial.scale_areas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates area scaling factors for a polar stereographic projection</p>
+<p>Arguments:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">lat</span></code>: latitude</p>
+</div></blockquote>
+<p>Keyword arguments:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">flat</span></code>: ellipsoidal flattening</p>
+<p><code class="docutils literal notranslate"><span class="pre">ref</span></code>: reference latitude (true scale latitude)</p>
+</div></blockquote>
+<p>Returns:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">scale</span></code>: area scaling factors at input latitudes</p>
+</div></blockquote>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="shepard_interpolant.html" class="btn btn-neutral float-right" title="shepard_interpolant.py" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="radial_basis.html" class="btn btn-neutral float-left" title="radial_basis.py" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2016–2022, Tyler C. Sutterley.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
