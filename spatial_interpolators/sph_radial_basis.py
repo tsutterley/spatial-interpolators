@@ -1,27 +1,29 @@
 #!/usr/bin/env python
 u"""
 sph_radial_basis.py
-Written by Tyler Sutterley (02/2019)
+Written by Tyler Sutterley (01/2022)
 
-Interpolates a sparse grid over a sphere using radial basis functions with
-    QR factorization option to eliminate ill-conditioning (Fornberg, 2007)
+Interpolates data over a sphere using radial basis functions
+    with QR factorization option to eliminate ill-conditioning
 
 CALLING SEQUENCE:
-    DATA = sph_radial_basis(lon, lat, data, LONGITUDE, LATITUDE,
+    output = sph_radial_basis(lon, lat, data, longitude, latitude,
         smooth=smooth, epsilon=epsilon, method='inverse')
 
 INPUTS:
     lon: input longitude
     lat: input latitude
-    data: input data (Z variable)
-    LONGITUDE: output longitude (array or grid)
-    LATITUDE: output latitude (array or grid)
+    data: input data
+    longitude: output longitude
+    latitude: output latitude
+
 OUTPUTS:
-    DATA: interpolated data (array or grid)
+    output: interpolated data
+
 OPTIONS:
     smooth: smoothing weights
-    epsilon: norm input
-        default is mean Euclidean distance
+    epsilon: adjustable constant for distance functions
+        default is the mean Euclidean distance
     method: radial basis function (** has option for QR factorization method)
         multiquadric**
         inverse_multiquadric** or inverse** (default)
@@ -33,7 +35,7 @@ OPTIONS:
         thin_plate: thin-plate spline
     QR: use QR factorization algorithm of Fornberg (2007)
     norm: distance function for radial basis functions (if not using QR)
-        Euclidean: Euclidean Distance with distance_matrix (default)
+        euclidean: Euclidean Distance with distance_matrix (default)
         GCD: Great-Circle Distance using n-vectors with angle_matrix
 
 PYTHON DEPENDENCIES:
@@ -47,6 +49,7 @@ REFERENCES:
         Radial Basis Functions." SIAM J. Sci. Comput. 33(2), 869-892 (2011)
 
 UPDATE HISTORY:
+    Updated 01/2022: added function docstrings
     Updated 02/2019: compatibility updates for python3
     Updated 09/2017: using rcond=-1 in numpy least-squares algorithms
     Updated 08/2016: finished QR factorization method, added norm option
@@ -66,25 +69,60 @@ import numpy as np
 import scipy.special
 from spatial_interpolators.legendre import legendre
 
-def sph_radial_basis(lon, lat, data, LONGITUDE, LATITUDE, smooth=0.,
-    epsilon=None, method='inverse', QR=False, norm='Euclidean'):
+def sph_radial_basis(lon, lat, data, longitude, latitude, smooth=0.,
+    epsilon=None, method='inverse', QR=False, norm='euclidean'):
+    """
+    Interpolates a sparse grid over a sphere using radial basis
+    functions with QR factorization option
+
+    Arguments
+    ---------
+    lon: input longitude
+    lat: input latitude
+    data: input data
+    longitude: output longitude
+    latitude: output latitude
+
+    Keyword arguments
+    -----------------
+    smooth: smoothing weights
+    epsilon: adjustable constant for distance functions
+    method: compactly supported radial basis function
+        - multiquadric
+        - inverse_multiquadric or inverse (default)
+        - inverse_quadratic
+        - gaussian
+        - linear (first-order polyharmonic spline)
+        - cubic (third-order polyharmonic spline)
+        - quintic (fifth-order polyharmonic spline)
+        - thin_plate: thin-plate spline
+    QR: use QR factorization algorithm of Fornberg (2007)
+    norm: distance function for radial basis functions (if not using QR)
+        euclidean: Euclidean Distance with distance_matrix (default)
+        GCD: Great-Circle Distance using n-vectors with angle_matrix
+
+    Returns
+    -------
+    output: interpolated data grid
+    """
+
     #-- remove singleton dimensions
     lon = np.squeeze(lon)
     lat = np.squeeze(lat)
     data = np.squeeze(data)
-    LONGITUDE = np.squeeze(LONGITUDE)
-    LATITUDE = np.squeeze(LATITUDE)
+    longitude = np.squeeze(longitude)
+    latitude = np.squeeze(latitude)
     #-- size of new matrix
-    if (np.ndim(LONGITUDE) > 1):
-        nlon,nlat = np.shape(LONGITUDE)
+    if (np.ndim(longitude) > 1):
+        nlon,nlat = np.shape(longitude)
         sz = np.int(nlon*nlat)
     else:
-        sz = len(LONGITUDE)
+        sz = len(longitude)
 
     #-- Check to make sure sizes of input arguments are correct and consistent
     if (len(data) != len(lon)) | (len(data) != len(lat)):
         raise Exception('Length of Longitude, Latitude, and Data must be equal')
-    if (np.shape(LONGITUDE) != np.shape(LATITUDE)):
+    if (np.shape(longitude) != np.shape(latitude)):
         raise Exception('Size of output Longitude and Latitude must be equal')
 
     #-- create python dictionary of radial basis function formulas
@@ -117,7 +155,7 @@ def sph_radial_basis(lon, lat, data, LONGITUDE, LATITUDE, smooth=0.,
         raise ValueError("{0} expansion not available with QR".format(method))
     #-- create python dictionary of distance functions (if not using QR)
     norm_functions = {}
-    norm_functions['Euclidean'] = distance_matrix
+    norm_functions['euclidean'] = distance_matrix
     norm_functions['GCD'] = angle_matrix
     if norm in norm_functions:
         norm_matrix = norm_functions[norm]
@@ -131,8 +169,8 @@ def sph_radial_basis(lon, lat, data, LONGITUDE, LATITUDE, smooth=0.,
     ys = np.sin(th)*np.sin(phi)
     zs = np.cos(th)
     #-- convert output longitude and latitude into cartesian X,Y,Z
-    PHI = np.pi*LONGITUDE.flatten()/180.0
-    THETA = np.pi*(90.0 - LATITUDE.flatten())/180.0
+    PHI = np.pi*longitude.flatten()/180.0
+    THETA = np.pi*(90.0 - latitude.flatten())/180.0
     XI = np.sin(THETA)*np.cos(PHI)
     YI = np.sin(THETA)*np.sin(PHI)
     ZI = np.cos(THETA)
@@ -161,7 +199,7 @@ def sph_radial_basis(lon, lat, data, LONGITUDE, LATITUDE, smooth=0.,
             E[:,index:2*l+index+1] = spherical_harmonic_matrix(l,THETA,PHI)
             index += 2*l + 1
         #-- calculate output interpolated array (or matrix)
-        DATA = np.dot(E,np.dot(R,w))
+        output = np.dot(E,np.dot(R,w))
     else:
         #-- Calculation of the PHI Matrix with smoothing
         PHI = np.zeros((N+1,M+1))
@@ -184,13 +222,13 @@ def sph_radial_basis(lon, lat, data, LONGITUDE, LATITUDE, smooth=0.,
         P = np.ones((sz,1))
         E = np.concatenate(([E, P]),axis=1)
         #-- calculate output interpolated array (or matrix)
-        DATA = np.dot(E,w)
+        output = np.dot(E,w)
 
     #-- reshape output to original dimensions and return
-    if (np.ndim(LONGITUDE) == 1):
-        return np.squeeze(DATA)
+    if (np.ndim(longitude) == 1):
+        return np.squeeze(output)
     else:
-        return DATA.reshape(nlon,nlat)
+        return output.reshape(nlon,nlat)
 
 #-- define radial basis function formulas
 def multiquadric(epsilon, r):

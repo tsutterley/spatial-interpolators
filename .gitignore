@@ -21,7 +21,7 @@ PvQv_C.c
 *.rar
 *.tar
 *.zip
- 
+
 # Logs and databases #
 ######################
 *.log
@@ -31,7 +31,19 @@ PvQv_C.c
 *.gmtdefaults4
 .RData
 .Rhistory
-*-checkpoint.ipynb
+octave-workspace
+__pycache__
+build/
+dist/
+develop-eggs/
+run/
+wheels/
+.eggs/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache
+pythonenv*/
 
 # OS generated files #
 ######################
@@ -74,3 +86,10 @@ Thumbs.db
 *.mtc0
 *.sw*
 *.hidden
+None*.png
+
+# Jupyter Checkpoints #
+#######################
+.ipynb_checkpoints
+*-checkpoint.ipynb
+Untitled.ipynb

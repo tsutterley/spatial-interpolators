@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 sph_spline.py
-Written by Tyler Sutterley (09/2017)
+Written by Tyler Sutterley (01/2022)
 
 Interpolates a sparse grid over a sphere using spherical surface splines in
     tension following Wessel and Becker (2008)
@@ -10,18 +10,20 @@ Uses Generalized Legendre Function algorithm from Spanier and Oldman
     "An Atlas of Functions", 1987
 
 CALLING SEQUENCE:
-    DATA = sph_spline(lon, lat, data, LONGITUDE, LATITUDE, TENSION=0)
+    output = sph_spline(lon, lat, data, longitude, latitude, tension=0)
 
 INPUTS:
     lon: input longitude
     lat: input latitude
-    data: input data (Z variable)
-    LONGITUDE: output longitude (array or grid)
-    LATITUDE: output latitude (array or grid)
+    data: input data
+    longitude: output longitude
+    latitude: output latitude
+
 OUTPUTS:
-    DATA: interpolated data (array or grid)
+    output: interpolated data
+
 OPTIONS:
-    TENSION: tension to use in interpolation (greater than 0)
+    tension: tension to use in interpolation (greater than 0)
 
 PYTHON DEPENDENCIES:
     numpy: Scientific Computing Tools For Python (https://numpy.org)
@@ -34,6 +36,7 @@ REFERENCES:
         Geophysical Journal International, doi:10.1111/j.1365-246X.2008.03829.x
 
 UPDATE HISTORY:
+    Updated 01/2022: added function docstrings
     Updated 09/2017: using rcond=-1 in numpy least-squares algorithms
     Updated 08/2016: using cythonized version of generalized Legendre function
         treat case for no tension but x is equal to 1 within machine precision
@@ -43,23 +46,44 @@ import numpy as np
 import scipy.special
 from spatial_interpolators.PvQv_C import PvQv_C
 
-def sph_spline(lon, lat, data, LONGITUDE, LATITUDE, TENSION=0.):
+def sph_spline(lon, lat, data, longitude, latitude, tension=0.):
+    """
+    Interpolates a sparse grid over a sphere using spherical
+    surface splines in tension
+
+    Arguments
+    ---------
+    lon: input longitude
+    lat: input latitude
+    data: input data
+    longitude: output longitude
+    latitude: output latitude
+
+    Keyword arguments
+    -----------------
+    tension: tension to use in interpolation (greater than 0)
+
+    Returns
+    -------
+    output: interpolated data grid
+    """
+
     #-- remove singleton dimensions
     lon = np.squeeze(lon)
     lat = np.squeeze(lat)
     data = np.squeeze(data)
-    LONGITUDE = np.squeeze(LONGITUDE)
-    LATITUDE = np.squeeze(LATITUDE)
+    longitude = np.squeeze(longitude)
+    latitude = np.squeeze(latitude)
     #-- size of new matrix
-    if (np.ndim(LONGITUDE) > 1):
-        nlon,nlat = np.shape(LONGITUDE)
+    if (np.ndim(longitude) > 1):
+        nlon,nlat = np.shape(longitude)
 
     #-- Check to make sure sizes of input arguments are correct and consistent
     if (len(data) != len(lon)) | (len(data) != len(lat)):
         raise Exception('Length of Longitude, Latitude, and Data must be equal')
-    if (np.shape(LONGITUDE) != np.shape(LATITUDE)):
+    if (np.shape(longitude) != np.shape(latitude)):
         raise Exception('Size of output Longitude and Latitude must be equal')
-    if (TENSION < 0):
+    if (tension < 0):
         raise ValueError('TENSION must be greater than 0')
 
     #-- convert input lat and lon into cartesian X,Y,Z over unit sphere
@@ -69,12 +93,12 @@ def sph_spline(lon, lat, data, LONGITUDE, LATITUDE, TENSION=0.):
     ys = np.sin(th)*np.sin(phi)
     zs = np.cos(th)
     #-- convert output longitude and latitude into cartesian X,Y,Z
-    PHI = np.pi*LONGITUDE.flatten()/180.0
-    THETA = np.pi*(90.0 - LATITUDE.flatten())/180.0
+    PHI = np.pi*longitude.flatten()/180.0
+    THETA = np.pi*(90.0 - latitude.flatten())/180.0
     XI = np.sin(THETA)*np.cos(PHI)
     YI = np.sin(THETA)*np.sin(PHI)
     ZI = np.cos(THETA)
-    sz = len(LONGITUDE.flatten())
+    sz = len(longitude.flatten())
 
     #-- Find and remove mean from data
     data_mean = data.mean()
@@ -88,24 +112,24 @@ def sph_spline(lon, lat, data, LONGITUDE, LATITUDE, TENSION=0.):
     for i in range(N):
         Rd = np.dot(np.transpose([xs,ys,zs]), np.array([xs[i],ys[i],zs[i]]))
         #-- remove singleton dimensions and calculate spherical surface splines
-        GG[i,:] = SSST(Rd, P=TENSION)
+        GG[i,:] = SSST(Rd, P=tension)
 
     #-- Compute model m for normalized data
     m = np.linalg.lstsq(GG,data_norm,rcond=-1)[0]
 
     #-- calculate output interpolated array (or matrix)
-    DATA = np.zeros((sz))
+    output = np.zeros((sz))
     for j in range(sz):
         Re = np.dot(np.transpose([xs,ys,zs]), np.array([XI[j],YI[j],ZI[j]]))
         #-- remove singleton dimensions and calculate spherical surface splines
-        gg = SSST(Re, P=TENSION)
-        DATA[j] = data_mean + data_range*np.dot(gg, m)
+        gg = SSST(Re, P=tension)
+        output[j] = data_mean + data_range*np.dot(gg, m)
 
     #-- reshape output to original dimensions and return
-    if (np.ndim(LONGITUDE) > 1):
-        DATA = DATA.reshape(nlon,nlat)
+    if (np.ndim(longitude) > 1):
+        output = output.reshape(nlon,nlat)
 
-    return DATA
+    return output
 
 #-- SSST: Spherical Surface Spline in Tension
 #-- Returns the Green's function for a spherical surface spline in tension,
@@ -117,13 +141,11 @@ def SSST(x, P=0):
     if (P == 0):
         #-- use dilogarithm (Spence's function) if using splines without tension
         y = np.zeros_like(x)
-        count = np.count_nonzero(np.abs(x) < (1.0 - eps))
-        if (count != 0):
+        if np.any(np.abs(x) < (1.0 - eps)):
             k, = np.nonzero(np.abs(x) < (1.0 - eps))
             y[k] = scipy.special.spence(0.5 - 0.5*x[k])
         #-- Deal with special cases x == +/- 1
-        count = np.count_nonzero(((x + eps) >= 1.0) | ((x - eps) <= -1.0))
-        if (count != 0):
+        if np.any(((x + eps) >= 1.0) | ((x - eps) <= -1.0)):
             k, = np.nonzero(((x + eps) >= 1.0) | ((x - eps) <= -1.0))
             y[k] = scipy.special.spence(0.5 - 0.5*np.sign(x[k]))
     else:
@@ -134,20 +156,17 @@ def SSST(x, P=0):
         y = np.zeros_like(x, dtype=v.dtype)
         A = np.pi/np.sin(v*np.pi)
         #-- Where Pv solution works
-        count = np.count_nonzero(np.abs(x) < (1.0 - eps))
-        if (count != 0):
+        if np.any(np.abs(x) < (1.0 - eps)):
             k, = np.nonzero(np.abs(x) < (1.0 - eps))
             y[k] = A*Pv(-x[k],v) - np.log(1.0 - x[k])
         #-- Approximations where x is close to -1 or 1 using values from
         #-- "An Atlas of Functions" by Spanier and Oldham, 1987 (590)
         #-- Deal with special case x == -1
-        count = np.count_nonzero((x - eps) <= -1.0)
-        if (count != 0):
+        if np.any((x - eps) <= -1.0):
             k, = np.nonzero((x - eps) <= -1.0)
             y[k] = A - np.log(2.0)
         #-- Deal with special case x == +1
-        count = np.count_nonzero((x + eps) >= 1.0)
-        if (count != 0):
+        if np.any((x + eps) >= 1.0):
             k, = np.nonzero((x + eps) >= 1.0)
             y[k] = np.pi*(1.0/np.tan(v*np.pi)) + 2.0*(np.euler_gamma +
                 scipy.special.psi(1.0+v)) - np.log(2.0)

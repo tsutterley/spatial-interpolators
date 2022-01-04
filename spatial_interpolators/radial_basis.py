@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 u"""
 radial_basis.py
-Written by Tyler Sutterley (07/2021)
+Written by Tyler Sutterley (01/2022)
 
-Interpolates a sparse grid using radial basis functions
+Interpolates data using radial basis functions
 
 CALLING SEQUENCE:
     ZI = radial_basis(xs, ys, zs, XI, YI, polynomial=0,
@@ -12,17 +12,17 @@ CALLING SEQUENCE:
 INPUTS:
     xs: scaled input X data
     ys: scaled input Y data
-    data: input data (Z variable)
-    XI: scaled grid X for output ZI (or array)
-    YI: scaled grid Y for output ZI (or array)
+    zs: input data
+    XI: scaled grid X for output ZI
+    YI: scaled grid Y for output ZI
 
 OUTPUTS:
-    ZI: interpolated data grid (or array)
+    ZI: interpolated data grid
 
 OPTIONS:
     smooth: smoothing weights
     metric: distance metric to use (default euclidean)
-    epsilon: norm input
+    epsilon: adjustable constant for distance functions
         default is mean Euclidean distance
     polynomial: polynomial order if augmenting radial basis functions
         default None: no polynomials
@@ -47,13 +47,11 @@ REFERENCES:
         Computational Mathematics, 2003.
 
 UPDATE HISTORY:
+    Updated 01/2022: added function docstrings
     Updated 07/2021: using scipy spatial distance routines
     Updated 09/2017: using rcond=-1 in numpy least-squares algorithms
     Updated 01/2017: epsilon in polyharmonic splines (linear, cubic, quintic)
     Updated 08/2016: using format text within ValueError, edit constant vector
-        removed 3 dimensional option of radial basis (spherical)
-        changed hierarchical_radial_basis to compact_radial_basis using
-            compactly-supported radial basis functions and sparse matrices
         added low-order polynomial option (previously used default constant)
     Updated 01/2016: new hierarchical_radial_basis function
         that first reduces to points within distance.  added cutoff option
@@ -66,6 +64,38 @@ import scipy.spatial
 
 def radial_basis(xs, ys, zs, XI, YI, smooth=0.0, metric='euclidean',
     epsilon=None, method='inverse', polynomial=None):
+    """
+    Interpolates data using radial basis functions
+
+    Arguments
+    ---------
+    xs: scaled input x-coordinates
+    ys: scaled input y-coordinates
+    zs: input data
+    XI: scaled output x-coordinates for data grid
+    YI: scaled output y-coordinates for data grid
+
+    Keyword arguments
+    -----------------
+    smooth: smoothing weights
+    metric: distance metric to use (default euclidean)
+    epsilon: adjustable constant for distance functions
+    method: radial basis function
+        - multiquadric
+        - inverse_multiquadric or inverse (default)
+        - inverse_quadratic
+        - gaussian
+        - linear (first-order polyharmonic spline)
+        - cubic (third-order polyharmonic spline)
+        - quintic (fifth-order polyharmonic spline)
+        - thin_plate: thin-plate spline
+    polynomial: polynomial order if augmenting radial basis functions
+
+    Returns
+    -------
+    ZI: interpolated data grid
+    """
+
     #-- remove singleton dimensions
     xs = np.squeeze(xs)
     ys = np.squeeze(ys)

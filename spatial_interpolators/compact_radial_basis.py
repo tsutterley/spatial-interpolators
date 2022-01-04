@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 u"""
 compact_radial_basis.py
-Written by Tyler Sutterley (02/2019)
+Written by Tyler Sutterley (01/2022)
 
-Interpolates a sparse grid using compactly supported radial basis functions
+Interpolates data using compactly supported radial basis functions
     of minimal degree (Wendland functions) and sparse matrix algebra
 
     Wendland functions have the form
@@ -18,13 +18,15 @@ CALLING SEQUENCE:
 INPUTS:
     xs: scaled input X data
     ys: scaled input Y data
-    zs: input data (Z variable)
-    XI: scaled grid X for output ZI (or array)
-    YI: scaled grid Y for output ZI (or array)
+    zs: input data
+    XI: scaled grid X for output ZI
+    YI: scaled grid Y for output ZI
     dimension: spatial dimension of Wendland function (d)
     order: smoothness order of Wendland function (k)
+
 OUTPUTS:
-    ZI: interpolated data grid (or array)
+    ZI: interpolated data grid
+
 OPTIONS:
     smooth: smoothing weights
     radius: scaling factor for the basis function (the radius of the
@@ -48,6 +50,7 @@ REFERENCES:
         Applied and Computational Mathematics, 2003.
 
 UPDATE HISTORY:
+    Updated 01/2022: added function docstrings
     Updated 02/2019: compatibility updates for python3
     Updated 09/2017: using rcond=-1 in numpy least-squares algorithms
     Updated 08/2016: using format text within ValueError, edit constant vector
@@ -68,6 +71,31 @@ import scipy.spatial
 
 def compact_radial_basis(xs, ys, zs, XI, YI, dimension, order, smooth=0.,
     radius=None, method='wendland'):
+    """
+    Interpolates a sparse grid using compactly supported radial basis
+    functions of minimal degree and sparse matrix algebra
+
+    Arguments
+    ---------
+    xs: scaled input x-coordinates
+    ys: scaled input y-coordinates
+    zs: input data
+    XI: scaled output x-coordinates for data grid
+    YI: scaled output y-coordinates for data grid
+    dimension: spatial dimension of Wendland function (d)
+    order: smoothness order of Wendland function (k)
+
+    Keyword arguments
+    -----------------
+    smooth: smoothing weights
+    radius: scaling factor for the basis function
+    method: compactly supported radial basis function
+        - wendland (default)
+
+    Returns
+    -------
+    ZI: interpolated data grid
+    """
     #-- remove singleton dimensions
     xs = np.squeeze(xs)
     ys = np.squeeze(ys)

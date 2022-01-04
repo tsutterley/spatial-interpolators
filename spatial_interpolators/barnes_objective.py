@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 barnes_objective.py
-Written by Tyler Sutterley (08/2016)
+Written by Tyler Sutterley (01/2022)
 
 Barnes objective analysis for the optimal interpolation
 of an input grid using a successive corrections scheme
@@ -13,17 +13,19 @@ CALLING SEQUENCE:
 INPUTS:
     xs: input X data
     ys: input Y data
-    zs: input data (Z variable)
-    XI: grid X for output ZI (or array)
-    YI: grid Y for output ZI (or array)
+    zs: input data
+    XI: grid X for output ZI
+    YI: grid Y for output ZI
     XR: x component of Barnes smoothing length scale
         Remains fixed throughout the iterations
     YR: y component of Barnes smoothing length scale
         Remains fixed throughout the iterations
+
 OUTPUTS:
-    ZI: interpolated grid (or array)
+    ZI: interpolated grid
+
 OPTIONS:
-    RUNS: number of iterations
+    runs: number of iterations
 
 REFERENCES:
 Barnes, S. L. (1994) Applications of the Barnes objective analysis
@@ -42,11 +44,34 @@ Daley, R. (1991) Atmospheric data analysis, Cambridge Press, New York.
     Section 3.6.
 
 UPDATE HISTORY:
+    Updated 01/2022: added function docstrings
     Written 08/2016
 """
 import numpy as np
 
-def barnes_objective(xs, ys, zs, XI, YI, XR, YR, RUNS=3):
+def barnes_objective(xs, ys, zs, XI, YI, XR, YR, runs=3):
+    """
+    Barnes objective analysis for the optimal interpolation
+    of an input grid using a successive corrections scheme
+
+    Arguments
+    ---------
+    xs: input x-coordinates
+    ys: input y-coordinates
+    zs: input data
+    XI: output x-coordinates for data grid
+    YI: output y-coordinates for data grid
+    XR: x-component of Barnes smoothing length scale
+    YR: y-component of Barnes smoothing length scale
+
+    Keyword arguments
+    -----------------
+    runs: number of iterations
+
+    Returns
+    -------
+    ZI: interpolated data grid
+    """
     #-- remove singleton dimensions
     xs = np.squeeze(xs)
     ys = np.squeeze(ys)
@@ -79,11 +104,11 @@ def barnes_objective(xs, ys, zs, XI, YI, XR, YR, RUNS=3):
         zp[i] = np.sum(zs*w)/sum(w)
 
     #-- allocate for even and odd zp arrays if iterating
-    if (RUNS > 0):
+    if (runs > 0):
         zpEven = np.zeros_like(zs)
         zpOdd = np.zeros_like(zs)
     #-- for each run
-    for n in range(RUNS):
+    for n in range(runs):
         #-- calculate even and odd zp arrays
         for j,xy in enumerate(zip(xs,ys)):
             dx = np.abs(xs - xy[0])

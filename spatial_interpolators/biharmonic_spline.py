@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 u"""
 biharmonic_spline.py
-Written by Tyler Sutterley (07/2021)
+Written by Tyler Sutterley (01/2022)
 
-Interpolates a sparse grid using 2D biharmonic splines (Sandwell, 1987)
+Interpolates data using 2D biharmonic splines (Sandwell, 1987)
 With or without tension parameters (Wessel and Bercovici, 1998)
 or using the regularized function of Mitasova and Mitas 1993
 
@@ -13,18 +13,19 @@ CALLING SEQUENCE:
 INPUTS:
     xs: input X data
     ys: input Y data
-    zs: input data (Z variable)
-    XI: grid X for output ZI (or array)
-    YI: grid Y for output ZI (or array)
+    zs: input data
+    XI: grid X for output ZI
+    YI: grid Y for output ZI
 
 OUTPUTS:
-    ZI: interpolated grid (or array)
+    ZI: interpolated grid
 
 OPTIONS:
-    METRIC: distance metric to use (default euclidean)
-    TENSION: tension to use in interpolation (between 0 and 1)
-    REGULAR: use regularized function of Mitasova and Mitas
-    EPS: minimum distance value for valid points (default 1e-7)
+    metric: distance metric to use (default euclidean)
+    tension: tension to use in interpolation (between 0 and 1)
+    regular: use regularized function of Mitasova and Mitas
+    eps: minimum distance value for valid points (default 1e-7)
+    scale: scale factor for normalized lengths (default 2e-2)
 
 PYTHON DEPENDENCIES:
     numpy: Scientific Computing Tools For Python (https://numpy.org)
@@ -38,6 +39,8 @@ REFERENCES:
     Mitasova and Mitas (1993), Mathematical Geology, Vol. 25, No. 6
 
 UPDATE HISTORY:
+    Updated 01/2022: added function docstrings
+        update regularized spline function to use arrays
     Updated 07/2021: using scipy spatial distance routines
     Updated 09/2017: use rcond=-1 in numpy least-squares algorithms
     Updated 08/2016: detrend input data and retrend output data. calculate c
@@ -48,8 +51,32 @@ UPDATE HISTORY:
 import numpy as np
 import scipy.spatial
 
-def biharmonic_spline(xs, ys, zs, XI, YI, METRIC='euclidean',
-    TENSION=0, REGULAR=False, EPS=1e-7):
+def biharmonic_spline(xs, ys, zs, XI, YI, metric='euclidean',
+    tension=0, regular=False, eps=1e-7, scale=0.02):
+    """
+    Interpolates a sparse grid using 2D biharmonic splines
+    with or without tension parameters or regularized functions
+
+    Arguments
+    ---------
+    xs: input x-coordinates
+    ys: input y-coordinates
+    zs: input data
+    XI: output x-coordinates for data grid
+    YI: output y-coordinates for data grid
+
+    Keyword arguments
+    -----------------
+    metric: distance metric to use (default euclidean)
+    tension: tension to use in interpolation (between 0 and 1)
+    regular: use regularized function of Mitasova and Mitas
+    eps: minimum distance value for valid points (default 1e-7)
+    scale: scale factor for normalized lengths (default 2e-2)
+
+    Returns
+    -------
+    ZI: interpolated data grid
+    """
     #-- remove singleton dimensions
     xs = np.squeeze(xs)
     ys = np.squeeze(ys)
@@ -67,14 +94,14 @@ def biharmonic_spline(xs, ys, zs, XI, YI, METRIC='euclidean',
         raise Exception('Length of X, Y, and Z must be equal')
     if (np.shape(XI) != np.shape(YI)):
         raise Exception('Size of XI and YI must be equal')
-    if (TENSION < 0) or (TENSION >= 1):
+    if (tension < 0) or (tension >= 1):
         raise ValueError('TENSION must be greater than 0 and less than 1')
 
     #-- Compute GG matrix for GG*m = d inversion problem
     npts = len(zs)
     GG = np.zeros((npts,npts))
     #-- Computation of distance Matrix (data to data)
-    if (METRIC == 'brute'):
+    if (metric == 'brute'):
         #-- use linear algebra to compute euclidean distances
         Rd = distance_matrix(
             np.array([xs, ys]),
@@ -85,24 +112,24 @@ def biharmonic_spline(xs, ys, zs, XI, YI, METRIC='euclidean',
         Rd = scipy.spatial.distance.cdist(
             np.array([xs, ys]).T,
             np.array([xs, ys]).T,
-            metric=METRIC)
+            metric=metric)
     #-- Calculate length scale for regularized case (Mitasova and Mitas)
     length_scale = np.sqrt((XI.max() - XI.min())**2 + (YI.max() - YI.min())**2)
     #-- calculate Green's function for valid points (with or without tension)
-    ii,jj = np.nonzero(Rd >= EPS)
-    if (TENSION == 0):
+    ii,jj = np.nonzero(Rd >= eps)
+    if (tension == 0):
         GG[ii,jj] = (Rd[ii,jj]**2) * (np.log(Rd[ii,jj]) - 1.0)
-    elif REGULAR:
-        GG[ii,jj] = regular_spline2D(Rd[ii,jj], TENSION, length_scale/50.0)
+    elif regular:
+        GG[ii,jj] = regular_spline2D(Rd[ii,jj], tension, scale*length_scale)
     else:
-        GG[ii,jj] = green_spline2D(Rd[ii,jj], TENSION)
+        GG[ii,jj] = green_spline2D(Rd[ii,jj], tension)
     #-- detrend dataset
     z0,r0,p = detrend2D(xs,ys,zs)
     #-- Compute model m for detrended data
     m = np.linalg.lstsq(GG,z0,rcond=-1)[0]
 
     #-- Computation of distance Matrix (data to mesh points)
-    if (METRIC == 'brute'):
+    if (metric == 'brute'):
         #-- use linear algebra to compute euclidean distances
         Re = distance_matrix(
             np.array([XI.flatten(),YI.flatten()]),
@@ -113,16 +140,16 @@ def biharmonic_spline(xs, ys, zs, XI, YI, METRIC='euclidean',
         Re = scipy.spatial.distance.cdist(
             np.array([XI.flatten(),YI.flatten()]).T,
             np.array([xs, ys]).T,
-            metric=METRIC)
+            metric=metric)
     gg = np.zeros_like(Re)
     #-- calculate Green's function for valid points (with or without tension)
-    ii,jj = np.nonzero(Re >= EPS)
-    if (TENSION == 0):
+    ii,jj = np.nonzero(Re >= eps)
+    if (tension == 0):
         gg[ii,jj] = (Re[ii,jj]**2) * (np.log(Re[ii,jj]) - 1.0)
-    elif REGULAR:
-        gg[ii,jj] = regular_spline2D(Re[ii,jj], TENSION, length_scale/50.0)
+    elif regular:
+        gg[ii,jj] = regular_spline2D(Re[ii,jj], tension, scale*length_scale)
     else:
-        gg[ii,jj] = green_spline2D(Re[ii,jj], TENSION)
+        gg[ii,jj] = green_spline2D(Re[ii,jj], tension)
 
     #-- Find 2D interpolated surface through irregular/regular X, Y grid points
     if (np.ndim(XI) == 1):
@@ -176,13 +203,14 @@ def green_spline2D(x, t):
     #-- inverse of tension parameter
     inv_c = 1.0/c
     #-- log(2) - 0.5772156
-    g0 = 0.115931515658412420677337
+    g0 = np.log(2) - np.euler_gamma
     #-- find points below (or equal to) 2 times inverse tension parameter
     ii, = np.nonzero(x <= (2.0*inv_c))
     u = c*x[ii]
-    y = 0.25*(u**2)
-    z = (u**2)/14.0625
+    y = (0.5*u)**2
+    z = (u/3.75)**2
     #-- Green's function for points ii (less than or equal to 2.0*c)
+    #-- from modified Bessel function of order zero
     G[ii] = (-np.log(0.5*u) * (z * (3.5156229 + z * (3.0899424 + z * \
         (1.2067492 + z * (0.2659732 + z * (0.360768e-1 + z*0.45813e-2))))))) + \
         (y * (0.42278420 + y * (0.23069756 + y * (0.3488590e-1 + \
@@ -205,21 +233,28 @@ def regular_spline2D(r, t, l):
     #-- allocate for output Green's function
     G = np.zeros_like(r)
     #-- Green's function for points A (less than or equal to 1)
-    A = np.nonzero(z <= 1.0)
-    G[A] =  0.99999193*z[A]
-    G[A] -= 0.24991055*z[A]**2
-    G[A] += 0.05519968*z[A]**3
-    G[A] -= 0.00976004*z[A]**4
-    G[A] += 0.00107857*z[A]**4
+    A, = np.nonzero(z <= 1.0)
+    Pa = [0.0, 0.99999193, -0.24991055, 0.05519968, -0.00976004, 0.00107857]
+    G[A] = polynomial_sum(Pa, z[A])
     #-- Green's function for points B (greater than 1)
-    B = np.nonzero(z > 1.0)
-    En = 0.2677737343 +  8.6347608925 * z[B]
-    Ed = 3.9584869228 + 21.0996530827 * z[B]
-    En += 18.0590169730 * z[B]**2
-    Ed += 25.6329561486 * z[B]**2
-    En += 8.5733287401 * z[B]**3
-    Ed += 9.5733223454 * z[B]**3
-    En += z[B]**4
-    Ed += z[B]**4
-    G[B] = np.log(z[B]) + 0.577215664901 + (En/Ed)/(z[B]*np.exp(z[B]))
+    B, = np.nonzero(z > 1.0)
+    Pn = [0.2677737343, 8.6347608925, 18.0590169730, 8.5733287401, 1]
+    Pd = [3.9584869228, 21.0996530827, 25.6329561486, 9.5733223454, 1]
+    En = polynomial_sum(Pn, z[B])
+    Ed = polynomial_sum(Pd, z[B])
+    G[B] = np.log(z[B]) + np.euler_gamma + (En/Ed)/(z[B]*np.exp(z[B]))
     return G
+
+#-- calculate the sum of a polynomial function of a variable
+def polynomial_sum(x1, x2):
+    """
+    Calculates the sum of a polynomial function of a variable
+
+    Arguments
+    ---------
+    x1: leading coefficient of polynomials of increasing order
+    x2: coefficients to be raised by polynomials
+    """
+    #-- convert variable to array if importing a single value
+    x2 = np.atleast_1d(x2)
+    return np.sum([c * (x2 ** i) for i,c in enumerate(x1)],axis=0)

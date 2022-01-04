@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 u"""
 sph_bilinear.py
-Written by Tyler Sutterley (09/2017)
+Written by Tyler Sutterley (01/2022)
 
-Spherical interpolation routine for gridded data using bilinear interpolation
+Interpolates data over a sphere using bilinear functions
 
 CALLING SEQUENCE:
     zi = sph_bilinear(x, y, z, xi, yi)
@@ -16,16 +16,17 @@ INPUTS:
     yi: output latitude
 
 OUTPUTS:
-    zi: data regridded to new global grid (or regional if using FLATTENED)
+    zi: interpolated data
 
 OPTIONS:
-    FLATTENED: input xi, yi are flattened arrays (nlon must equal nlat)
-    FILL_VALUE: value to use if xi and yi are out of range
+    flattened: input xi, yi are flattened arrays (nlon must equal nlat)
+    fill_value: value to use if xi and yi are out of range
 
 PYTHON DEPENDENCIES:
     numpy: Scientific Computing Tools For Python (https://numpy.org)
 
 UPDATE HISTORY:
+    Updated 01/2022: added function docstrings
     Updated 09/2017: use minimum distances with FLATTENED method
         if indices are out of range: replace with FILL_VALUE
     Updated 03/2016: added FLATTENED option for regional grids to global grids
@@ -34,7 +35,28 @@ UPDATE HISTORY:
 """
 import numpy as np
 
-def sph_bilinear(x, y, z, xi, yi, FLATTENED=False, FILL_VALUE=-9999.0):
+def sph_bilinear(x, y, z, xi, yi, flattened=False, fill_value=-9999.0):
+    """
+    Spherical interpolation routine for gridded data using
+    bilinear interpolation
+
+    Arguments
+    ---------
+    x: input longitude
+    y: input latitude
+    z: input data
+    xi: output longitude
+    yi: output latitude
+
+    Keyword arguments
+    -----------------
+    flattened: input xi, yi are flattened arrays
+    fill_value: value to use if xi and yi are out of range
+
+    Returns
+    -------
+    zi: interpolated data
+    """
 
     #-- Converting input data into geodetic coordinates in radians
     phi = x*np.pi/180.0
@@ -52,7 +74,7 @@ def sph_bilinear(x, y, z, xi, yi, FLATTENED=False, FILL_VALUE=-9999.0):
     xphi = xi*np.pi/180.0
     xth = (90.0 -yi)*np.pi/180.0
     #-- check if using flattened array or two-dimensional lat/lon
-    if FLATTENED:
+    if flattened:
         #-- output array
         ndat = len(xi)
         zi = np.zeros((ndat))
@@ -80,7 +102,7 @@ def sph_bilinear(x, y, z, xi, yi, FLATTENED=False, FILL_VALUE=-9999.0):
                 zi[i] = (Ia*Wa + Ib*Wb + Ic*Wc + Id*Wd)/W
             else:
                 #-- replace with fill value
-                zi[i] = FILL_VALUE
+                zi[i] = fill_value
     else:
         #-- output grid
         nphi = len(xi)
@@ -109,7 +131,7 @@ def sph_bilinear(x, y, z, xi, yi, FLATTENED=False, FILL_VALUE=-9999.0):
                     zi[i,j] = (Ia*Wa + Ib*Wb + Ic*Wc + Id*Wd)/W
                 else:
                     #-- replace with fill value
-                    zi[i,j] = FILL_VALUE
+                    zi[i,j] = fill_value
 
     #-- return the interpolated data
     return zi

@@ -7,5 +7,4 @@ from spatial_interpolators.compact_radial_basis import compact_radial_basis
 from spatial_interpolators.sph_radial_basis import sph_radial_basis
 from spatial_interpolators.shepard_interpolant import shepard_interpolant
 from spatial_interpolators.sph_bilinear import sph_bilinear
-from spatial_interpolators.sph2xyz import sph2xyz
-from spatial_interpolators.xyz2sph import xyz2sph
+import spatial_interpolators.spatial

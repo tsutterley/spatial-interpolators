@@ -11,9 +11,9 @@ description = 'Spatial interpolation tools for Python'
 keywords = 'spatial interpolation, regridding, regridding over a sphere'
 
 # get long_description from README.md
-with open("README.md", "r") as fh:
+with open("README.rst", "r") as fh:
     long_description = fh.read()
-long_description_content_type = "text/markdown"
+long_description_content_type = "text/x-rst"
 
 # get install requirements
 with open('requirements.txt') as fh:
