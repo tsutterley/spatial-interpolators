@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 barnes_objective.py
-Written by Tyler Sutterley (01/2022)
+Written by Tyler Sutterley (05/2022)
 
 Barnes objective analysis for the optimal interpolation
 of an input grid using a successive corrections scheme
@@ -27,23 +27,25 @@ OUTPUTS:
 OPTIONS:
     runs: number of iterations
 
+PYTHON DEPENDENCIES:
+    numpy: Scientific Computing Tools For Python
+        https://numpy.org
+
 REFERENCES:
-Barnes, S. L. (1994) Applications of the Barnes objective analysis
-    scheme.  Part I:  effects of undersampling, wave position, and
-    station randomness.  J. of Atmos. and Oceanic Tech., 11, 1433-1448.
-
-Barnes, S. L. (1994) Applications of the Barnes objective analysis
-    scheme.  Part II:  Improving derivative estimates.  J. of Atmos. and
-    Oceanic Tech., 11, 1449-1458.
-
-Barnes, S. L. (1994) Applications of the Barnes objective analysis
-    scheme.  Part III:  Tuning for minimum error.  J. of Atmos. and
-    Oceanic Tech., 11, 1459-1479.
-
-Daley, R. (1991) Atmospheric data analysis, Cambridge Press, New York.
-    Section 3.6.
+    S. L. Barnes, Applications of the Barnes objective analysis scheme.
+        Part I: effects of undersampling, wave position, and station
+        randomness. J. of Atmos. and Oceanic Tech., 11, 1433-1448. (1994)
+    S. L. Barnes, Applications of the Barnes objective analysis scheme.
+        Part II: Improving derivative estimates. J. of Atmos. and
+        Oceanic Tech., 11, 1449-1458. (1994_
+    S. L. Barnes, Applications of the Barnes objective analysis scheme.
+        Part III: Tuning for minimum error. J. of Atmos. and Oceanic
+        Tech., 11, 1459-1479. (1994)
+    R. Daley, Atmospheric data analysis, Cambridge Press, New York.
+        Section 3.6. (1991)
 
 UPDATE HISTORY:
+    Updated 05/2022: updated docstrings to numpy documentation format
     Updated 01/2022: added function docstrings
     Written 08/2016
 """
@@ -54,23 +56,49 @@ def barnes_objective(xs, ys, zs, XI, YI, XR, YR, runs=3):
     Barnes objective analysis for the optimal interpolation
     of an input grid using a successive corrections scheme
 
-    Arguments
-    ---------
-    xs: input x-coordinates
-    ys: input y-coordinates
-    zs: input data
-    XI: output x-coordinates for data grid
-    YI: output y-coordinates for data grid
-    XR: x-component of Barnes smoothing length scale
-    YR: y-component of Barnes smoothing length scale
-
-    Keyword arguments
-    -----------------
-    runs: number of iterations
+    Parameters
+    ----------
+    xs: float
+        input x-coordinates
+    ys: float
+        input y-coordinates
+    zs: float
+        input data
+    XI: float
+        output x-coordinates for data grid
+    YI: float
+        output y-coordinates for data grid
+    XR: float
+        x-component of Barnes smoothing length scale
+    YR: float
+        y-component of Barnes smoothing length scale
+    runs: int, default 3
+        number of iterations
 
     Returns
     -------
-    ZI: interpolated data grid
+    ZI: float
+        interpolated data grid
+
+    References
+    ----------
+    .. [Barnes1994a] S. L. Barnes,
+        "Applications of the Barnes objective analysis scheme.
+        Part I:  Effects of undersampling, wave position, and
+        station randomness," *Journal of Atmospheric and Oceanic
+        Technology*, 11(6), 1433--1448, (1994).
+    .. [Barnes1994b] S. L. Barnes,
+        "Applications of the Barnes objective analysis scheme.
+        Part II:  Improving derivative estimates,"
+        *Journal of Atmospheric and Oceanic Technology*,
+        11(6), 1449--1458, (1994).
+    .. [Barnes1994c] S. L. Barnes,
+        "Applications of the Barnes objective analysis scheme.
+        Part III:  Tuning for minimum error,"
+        *Journal of Atmospheric and Oceanic Technology*,
+        11(6), 1459--1479, (1994).
+    .. [Daley1991] R. Daley, *Atmospheric data analysis*,
+        Cambridge Press, New York.  (1991).
     """
     #-- remove singleton dimensions
     xs = np.squeeze(xs)

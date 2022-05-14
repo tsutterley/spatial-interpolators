@@ -1,0 +1,22 @@
+name: spatial-docs
+channels:
+  - conda-forge
+dependencies:
+  - cython
+  - docutils<0.18
+  - fontconfig
+  - freetype
+  - graphviz
+  - matplotlib
+  - notebook
+  - numpy
+  - numpydoc
+  - pip
+  - python>=3.6
+  - scipy
+  - sphinx
+  - sphinx-argparse
+  - sphinx_rtd_theme
+  - texlive-core
+  - pip:
+    ..

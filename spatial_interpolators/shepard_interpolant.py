@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 shepard_interpolant.py
-Written by Tyler Sutterley (01/2022)
+Written by Tyler Sutterley (05/2022)
 
 Evaluates Shepard interpolants to 2D data based on inverse distances
 Resultant output will not be as accurate as radial basis functions
@@ -29,16 +29,18 @@ OPTIONS:
     L: maximum distance to be included in weights
 
 PYTHON DEPENDENCIES:
-    numpy: Scientific Computing Tools For Python (https://numpy.org)
+    numpy: Scientific Computing Tools For Python
+        https://numpy.org
 
 REFERENCES:
-    Donald Shepard, A two-dimensional interpolation function for irregularly
+    D. Shepard, A two-dimensional interpolation function for irregularly
         spaced data, ACM68: Proceedings of the 1968 23rd ACM National Conference
     Schnell et al., Skill in forecasting extreme ozone pollution episodes with
         a global atmospheric chemistry model. Atmos. Chem. Phys., 14, 7721-7739,
         doi:10.5194/acp-14-7721-2014, 2014
 
 UPDATE HISTORY:
+    Updated 05/2022: updated docstrings to numpy documentation format
     Updated 01/2022: added function docstrings
     Updated 09/2016: added modified Shepard's interpolants for declustering
         following Schnell et al (2014)
@@ -52,25 +54,45 @@ def shepard_interpolant(xs, ys, zs, XI, YI, power=0.0, eps=1e-7,
     Evaluates Shepard interpolants to 2D data based on
     inverse distance weighting
 
-    Arguments
-    ---------
-    xs: input x-coordinates
-    ys: input y-coordinates
-    zs: input data
-    XI: output x-coordinates for data grid
-    YI: output y-coordinates for data grid
-
-    Keyword arguments
-    -----------------
-    power: Power used in the inverse distance weighting
-    eps: minimum distance value for valid points
-    modified: use declustering modified Shepard's interpolants
-    D: declustering distance
-    L: maximum distance to be included in weights
+    Parameters
+    ----------
+    xs: float
+        input x-coordinates
+    ys: float
+        input y-coordinates
+    zs: float
+        input data
+    XI: float
+        output x-coordinates for data grid
+    YI: float
+        output y-coordinates for data grid
+    power: float, default 0.0
+        Power used in the inverse distance weighting
+    eps: float, default 1e-7
+        minimum distance value for valid points
+    modified: boo, default False
+        use declustering modified Shepard's interpolants [Schnell2014]_
+    D: float, default 25e3
+        declustering distance
+    L: float, default 500e3
+        maximum distance to be included in weights
 
     Returns
     -------
-    ZI: interpolated data grid
+    ZI: float
+        interpolated data grid
+
+    References
+    ----------
+    .. [Schnell2014] J. Schnell, C. D. Holmes, A. Jangam, and M. J. Prather,
+        "Skill in forecasting extreme ozone pollution episodes with a global
+        atmospheric chemistry model," *Atmospheric Physics and chemistry*,
+        14(15), 7721--7739, (2014).
+        `doi: 10.5194/acp-14-7721-2014 <https://doi.org/10.5194/acp-14-7721-2014>`_
+    .. [Shepard1968] D. Shepard, "A two-dimensional interpolation function
+        for irregularly spaced data," *ACM68: Proceedings of the 1968 23rd
+        ACM National Conference*, 517--524, (1968).
+        `doi: 10.1145/800186.810616 <https://doi.org/10.1145/800186.810616>`_
     """
 
     #-- remove singleton dimensions

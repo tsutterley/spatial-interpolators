@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 biharmonic_spline.py
-Written by Tyler Sutterley (01/2022)
+Written by Tyler Sutterley (05/2022)
 
 Interpolates data using 2D biharmonic splines (Sandwell, 1987)
 With or without tension parameters (Wessel and Bercovici, 1998)
@@ -28,17 +28,20 @@ OPTIONS:
     scale: scale factor for normalized lengths (default 2e-2)
 
 PYTHON DEPENDENCIES:
-    numpy: Scientific Computing Tools For Python (https://numpy.org)
-    scipy: Scientific Tools for Python (https://docs.scipy.org/doc/)
+    numpy: Scientific Computing Tools For Python
+        https://numpy.org
+    scipy: Scientific Tools for Python
+        https://docs.scipy.org/doc/
 
 REFERENCES:
-    Sandwell, D. T. (1987), Biharmonic spline interpolation of GEOS-3 and
-        SEASAT altimeter data, Geophysical Research Letters, Vol. 2.
-    Wessel and Bercovici (1998), Interpolation with Splines in Tension: A
-        Green's Function Approach, Mathematical Geology, Vol. 30, No. 1.
-    Mitasova and Mitas (1993), Mathematical Geology, Vol. 25, No. 6
+    Sandwell, Biharmonic spline interpolation of GEOS-3 and SEASAT
+        altimeter data, Geophysical Research Letters, 14(2), (1987)
+    Wessel and Bercovici, Interpolation with Splines in Tension: A
+        Green's Function Approach, Mathematical Geology, 30(1), (1998)
+    Mitasova and Mitas, Mathematical Geology, 25(6), (1993)
 
 UPDATE HISTORY:
+    Updated 05/2022: updated docstrings to numpy documentation format
     Updated 01/2022: added function docstrings
         update regularized spline function to use arrays
     Updated 07/2021: using scipy spatial distance routines
@@ -57,25 +60,53 @@ def biharmonic_spline(xs, ys, zs, XI, YI, metric='euclidean',
     Interpolates a sparse grid using 2D biharmonic splines
     with or without tension parameters or regularized functions
 
-    Arguments
-    ---------
-    xs: input x-coordinates
-    ys: input y-coordinates
-    zs: input data
-    XI: output x-coordinates for data grid
-    YI: output y-coordinates for data grid
-
-    Keyword arguments
-    -----------------
-    metric: distance metric to use (default euclidean)
-    tension: tension to use in interpolation (between 0 and 1)
-    regular: use regularized function of Mitasova and Mitas
-    eps: minimum distance value for valid points (default 1e-7)
-    scale: scale factor for normalized lengths (default 2e-2)
+    Parameters
+    ----------
+    xs: float
+        input x-coordinates
+    ys: float
+        input y-coordinates
+    zs: float
+        input data
+    XI: float
+        output x-coordinates for data grid
+    YI: float
+        output y-coordinates for data grid
+    metric: str, default 'euclidean'
+        distance metric to use
+    tension: float, default 0
+        tension to use in interpolation
+        value must be between 0 and 1
+    regular: bool, default False
+        Use regularized function of Mitasova and Mitas
+    eps: float, default 1e-7
+        minimum distance value for valid points
+    scale: float, default 2e-2
+        scale factor for normalized lengths
 
     Returns
     -------
-    ZI: interpolated data grid
+    ZI: float
+        interpolated data grid
+
+    References
+    ----------
+    .. [Sandwell1987] D. T. Sandwell, "Biharmonic spline
+        interpolation of GEOS-3 and SEASAT altimeter data",
+        *Geophysical Research Letters*, 14(2), 139--142 (1987).
+        `doi: 10.1029/GL014i002p00139 <https://doi.org/10.1029/GL014i002p00139>`_
+    .. [Wessel1998] P. Wessel and D. Bercovici, "Interpolation
+        with Splines in Tension: A Green's Function Approach",
+        *Mathematical Geology*, 30(1), 77--93 (1998).
+        `doi: 10.1023/A:1021713421882 <https://doi.org/10.1023/A:1021713421882>`_
+    .. [Mitasova1993] H. Mit\ |aacute|\ |scaron|\ ov\ |aacute| and
+        L. Mit\ |aacute|\ |scaron|\, "Interpolation by regularized
+        spline with tension: I. Theory and implementation",
+        *Mathematical Geology*, 25(6), 641--655, (1993).
+        `doi: 10.1007/BF00893171 <https://doi.org/10.1007/BF00893171>`_
+
+    .. |aacute|    unicode:: U+00E1 .. LATIN SMALL LETTER A WITH ACUTE
+    .. |scaron|    unicode:: U+0161 .. LATIN SMALL LETTER S WITH CARON
     """
     #-- remove singleton dimensions
     xs = np.squeeze(xs)

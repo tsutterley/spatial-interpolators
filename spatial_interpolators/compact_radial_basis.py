@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 compact_radial_basis.py
-Written by Tyler Sutterley (01/2022)
+Written by Tyler Sutterley (05/2022)
 
 Interpolates data using compactly supported radial basis functions
     of minimal degree (Wendland functions) and sparse matrix algebra
@@ -37,8 +37,10 @@ OPTIONS:
         wu (not yet implemented)
 
 PYTHON DEPENDENCIES:
-    numpy: Scientific Computing Tools For Python (https://numpy.org)
-    scipy: Scientific Tools for Python (https://docs.scipy.org/doc/)
+    numpy: Scientific Computing Tools For Python
+        https://numpy.org
+    scipy: Scientific Tools for Python
+        https://docs.scipy.org/doc/
 
 REFERENCES:
     Holger Wendland, "Piecewise polynomial, positive definite and compactly
@@ -50,6 +52,7 @@ REFERENCES:
         Applied and Computational Mathematics, 2003.
 
 UPDATE HISTORY:
+    Updated 05/2022: updated docstrings to numpy documentation format
     Updated 01/2022: added function docstrings
     Updated 02/2019: compatibility updates for python3
     Updated 09/2017: using rcond=-1 in numpy least-squares algorithms
@@ -75,26 +78,49 @@ def compact_radial_basis(xs, ys, zs, XI, YI, dimension, order, smooth=0.,
     Interpolates a sparse grid using compactly supported radial basis
     functions of minimal degree and sparse matrix algebra
 
-    Arguments
-    ---------
-    xs: scaled input x-coordinates
-    ys: scaled input y-coordinates
-    zs: input data
-    XI: scaled output x-coordinates for data grid
-    YI: scaled output y-coordinates for data grid
-    dimension: spatial dimension of Wendland function (d)
-    order: smoothness order of Wendland function (k)
+    Parameters
+    ----------
+    xs: float
+        scaled input x-coordinates
+    ys: float
+        scaled input y-coordinates
+    zs: float
+        input data
+    XI: float
+        scaled output x-coordinates for data grid
+    YI: float
+        scaled output y-coordinates for data grid
+    dimension: int
+        spatial dimension of Wendland function (d)
+    order: int
+        smoothness order of Wendland function (k)
+    smooth: float, default 0.0
+        smoothing weights
+    radius: float or NoneType, default None
+        scaling factor for the basis function
+    method: str, default `wendland`
+        compactly supported radial basis function
 
-    Keyword arguments
-    -----------------
-    smooth: smoothing weights
-    radius: scaling factor for the basis function
-    method: compactly supported radial basis function
-        - wendland (default)
+        * ``'wendland'``
 
     Returns
     -------
-    ZI: interpolated data grid
+    ZI: float
+        interpolated data grid
+
+    References
+    ----------
+    .. [Buhmann2003] M. Buhmann, "Radial Basis Functions",
+        *Cambridge Monographs on Applied and Computational
+        Mathematics*, (2003).
+    .. [Wendland1995] H. Wendland, "Piecewise polynomial,
+        positive definite and compactly supported radial
+        functions of minimal degree," *Advances in
+        Computational Mathematics*, 4, 389--396, (1995).
+        `doi: 10.1007/BF02123482 <https://doi.org/10.1007/BF02123482>`_
+    .. [Wendland2005] H. Wendland, "Scattered Data Approximation",
+        *Cambridge Monographs on Applied and Computational Mathematics*,
+        (2005).
     """
     #-- remove singleton dimensions
     xs = np.squeeze(xs)

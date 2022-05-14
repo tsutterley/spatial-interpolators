@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 sph_bilinear.py
-Written by Tyler Sutterley (01/2022)
+Written by Tyler Sutterley (05/2022)
 
 Interpolates data over a sphere using bilinear functions
 
@@ -23,9 +23,11 @@ OPTIONS:
     fill_value: value to use if xi and yi are out of range
 
 PYTHON DEPENDENCIES:
-    numpy: Scientific Computing Tools For Python (https://numpy.org)
+    numpy: Scientific Computing Tools For Python
+        https://numpy.org
 
 UPDATE HISTORY:
+    Updated 05/2022: updated docstrings to numpy documentation format
     Updated 01/2022: added function docstrings
     Updated 09/2017: use minimum distances with FLATTENED method
         if indices are out of range: replace with FILL_VALUE
@@ -40,22 +42,27 @@ def sph_bilinear(x, y, z, xi, yi, flattened=False, fill_value=-9999.0):
     Spherical interpolation routine for gridded data using
     bilinear interpolation
 
-    Arguments
-    ---------
-    x: input longitude
-    y: input latitude
-    z: input data
-    xi: output longitude
-    yi: output latitude
-
-    Keyword arguments
-    -----------------
-    flattened: input xi, yi are flattened arrays
-    fill_value: value to use if xi and yi are out of range
+    Parameters
+    ----------
+    x: float
+        input longitude
+    y: float
+        input latitude
+    z: float
+        input data
+    xi: float
+        output longitude
+    yi: float
+        output latitude
+    flattened: bool, default False
+        input xi, yi are flattened arrays
+    fill_value: float, default -9999.0
+        value to use if xi and yi are out of range
 
     Returns
     -------
-    zi: interpolated data
+    zi: float
+        interpolated data
     """
 
     #-- Converting input data into geodetic coordinates in radians

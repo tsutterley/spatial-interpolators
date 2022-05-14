@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 sph_radial_basis.py
-Written by Tyler Sutterley (01/2022)
+Written by Tyler Sutterley (05/2022)
 
 Interpolates data over a sphere using radial basis functions
     with QR factorization option to eliminate ill-conditioning
@@ -39,8 +39,10 @@ OPTIONS:
         GCD: Great-Circle Distance using n-vectors with angle_matrix
 
 PYTHON DEPENDENCIES:
-    numpy: Scientific Computing Tools For Python (https://numpy.org)
-    scipy: Scientific Tools for Python (https://docs.scipy.org/doc/)
+    numpy: Scientific Computing Tools For Python
+        https://numpy.org
+    scipy: Scientific Tools for Python
+        https://docs.scipy.org/doc/
 
 REFERENCES:
     B Fornberg and C Piret, "A stable algorithm for flat radial basis functions
@@ -49,6 +51,7 @@ REFERENCES:
         Radial Basis Functions." SIAM J. Sci. Comput. 33(2), 869-892 (2011)
 
 UPDATE HISTORY:
+    Updated 05/2022: updated docstrings to numpy documentation format
     Updated 01/2022: added function docstrings
     Updated 02/2019: compatibility updates for python3
     Updated 09/2017: using rcond=-1 in numpy least-squares algorithms
@@ -75,35 +78,58 @@ def sph_radial_basis(lon, lat, data, longitude, latitude, smooth=0.,
     Interpolates a sparse grid over a sphere using radial basis
     functions with QR factorization option
 
-    Arguments
-    ---------
-    lon: input longitude
-    lat: input latitude
-    data: input data
-    longitude: output longitude
-    latitude: output latitude
+    Parameters
+    ----------
+    lon: float
+        input longitude
+    lat: float
+        input latitude
+    data: float
+        input data
+    longitude: float
+        output longitude
+    latitude: float
+        output latitude
+    smooth: float, default 0.0
+        smoothing weights
+    epsilon: float or NoneType, default None
+        adjustable constant for distance functions
+    method: str, default 'inverse'
+        compactly supported radial basis function
 
-    Keyword arguments
-    -----------------
-    smooth: smoothing weights
-    epsilon: adjustable constant for distance functions
-    method: compactly supported radial basis function
-        - multiquadric
-        - inverse_multiquadric or inverse (default)
-        - inverse_quadratic
-        - gaussian
-        - linear (first-order polyharmonic spline)
-        - cubic (third-order polyharmonic spline)
-        - quintic (fifth-order polyharmonic spline)
-        - thin_plate: thin-plate spline
-    QR: use QR factorization algorithm of Fornberg (2007)
-    norm: distance function for radial basis functions (if not using QR)
-        euclidean: Euclidean Distance with distance_matrix (default)
-        GCD: Great-Circle Distance using n-vectors with angle_matrix
+        * ``'multiquadric'`` [#f1]_
+        * ``'inverse_multiquadric'`` [#f1]_ or ``'inverse'`` [#f1]_
+        * ``'inverse_quadratic'`` [#f1]_
+        * ``'gaussian'`` [#f1]_
+        * ``'linear'``
+        * ``'cubic'``
+        * ``'quintic'``
+        * ``'thin_plate'``
+
+    QR: bool, default False
+        use QR factorization algorithm of [Fornsberg2007]_
+    norm: str, default 'euclidean'
+        Distance function for radial basis functions
+
+        * ``'euclidean'``: Euclidean Distance with distance_matrix
+        * ``'GCD'``: Great-Circle Distance using n-vectors with angle_matrix
 
     Returns
     -------
-    output: interpolated data grid
+    output: float
+        interpolated data grid
+
+    References
+    ----------
+    .. [Fornsberg2007] B. Fornberg and C. Piret,
+        "A stable algorithm for flat radial basis functions on a sphere,"
+        *SIAM Journal on Scientific Computing*, 30(1), 60--80, (2007).
+        `doi: 10.1137/060671991 <https://doi.org/10.1137/060671991>`_
+    .. [Fornsberg2011] B. Fornberg, E. Larsson, and N. Flyer,
+        "Stable Computations with Gaussian Radial Basis Functions,"
+        *SIAM Journal on Scientific Computing*, 33(2), 869--892, (2011).
+        `doi: 10.1137/09076756X <https://doi.org/10.1137/09076756X>`_
+    .. [#f1] has option for QR factorization method
     """
 
     #-- remove singleton dimensions
