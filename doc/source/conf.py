@@ -37,10 +37,10 @@ release = "v{0}".format(version)
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
+    "numpydoc",
     "sphinx.ext.graphviz",
     "sphinx.ext.viewcode",
-    "recommonmark",
-    "sphinx_markdown_tables"
+    "sphinxarg.ext"
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -56,7 +56,9 @@ master_doc = 'index'
 
 # -- Configuration options ---------------------------------------------------
 autosummary_generate = True
-numfig = True
+autodoc_member_order = 'bysource'
+numpydoc_show_class_members = False
+pygments_style = 'native'
 
 # -- Options for HTML output -------------------------------------------------
 

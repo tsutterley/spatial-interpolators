@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 spatial.py
-Written by Tyler Sutterley (01/2022)
+Written by Tyler Sutterley (04/2022)
 
 Utilities for operating on spatial data
 
@@ -11,12 +11,14 @@ PYTHON DEPENDENCIES:
         https://numpy.org/doc/stable/user/numpy-for-matlab-users.html
 
 UPDATE HISTORY:
-    Updated 01/2022: updated for public release
+    Updated 04/2022: docstrings in numpy documentation format
+    Updated 01/2022: use iteration breaks in convert ellipsoid function
     Updated 10/2021: add pole case in stereographic area scale calculation
     Updated 09/2021: can calculate height differences between ellipsoids
     Updated 07/2021: added function for determining input variable type
     Updated 03/2021: added polar stereographic area scale calculation
         add routines for converting to and from cartesian coordinates
+        replaced numpy bool/int to prevent deprecation warnings
     Updated 12/2020: added module for converting ellipsoids
     Written 11/2020
 """
@@ -25,7 +27,23 @@ import numpy as np
 def data_type(x, y, t):
     """
     Determines input data type based on variable dimensions
-    Inputs: spatial and temporal coordinates
+
+    Parameters
+    ----------
+    x: float
+        x-dimension coordinates
+    y: float
+        y-dimension coordinates
+    t: float
+        time-dimension coordinates
+
+    Returns
+    -------
+    string denoting input data type
+
+        - ``'time series'``
+        - ``'drift'``
+        - ``'grid'``
     """
     xsize = np.size(x)
     ysize = np.size(y)
@@ -45,26 +63,36 @@ def convert_ellipsoid(phi1, h1, a1, f1, a2, f2, eps=1e-12, itmax=10):
     """
     Convert latitudes and heights to a different ellipsoid using Newton-Raphson
 
-    Inputs:
-        phi1: latitude of input ellipsoid in degrees
-        h1: height above input ellipsoid in meters
-        a1: semi-major axis of input ellipsoid
-        f1: flattening of input ellipsoid
-        a2: semi-major axis of output ellipsoid
-        f2: flattening of output ellipsoid
+    Parameters
+    ----------
+    phi1: float
+        latitude of input ellipsoid in degrees
+    h1: float
+        height above input ellipsoid in meters
+    a1: float
+        semi-major axis of input ellipsoid
+    f1: float
+        flattening of input ellipsoid
+    a2: float
+        semi-major axis of output ellipsoid
+    f2: float
+        flattening of output ellipsoid
+    eps: float, default 1e-12
+        tolerance to prevent division by small numbers and
+        to determine convergence
+    itmax: int, default 10
+        maximum number of iterations to use in Newton-Raphson
 
-    Options:
-        eps: tolerance to prevent division by small numbers
-            and to determine convergence
-        itmax: maximum number of iterations to use in Newton-Raphson
+    Returns
+    -------
+    phi2: float
+        latitude of output ellipsoid in degrees
+    h2: float
+        height above output ellipsoid in meters
 
-    Returns:
-        phi2: latitude of output ellipsoid in degrees
-        h2: height above output ellipsoid in meters
-
-    References:
-        Astronomical Algorithms, Jean Meeus, 1991, Willmann-Bell, Inc.
-            pp. 77-82
+    References
+    ----------
+    .. [1] J Meeus, Astronomical Algorithms, pp. 77-82 (1991)
     """
     if (len(phi1) != len(h1)):
         raise ValueError('phi and h have incompatable dimensions')
@@ -179,18 +207,27 @@ def compute_delta_h(a1, f1, a2, f2, lat):
     Compute difference in elevation for two ellipsoids at a given
         latitude using a simplified empirical equation
 
-    Inputs:
-        a1: semi-major axis of input ellipsoid
-        f1: flattening of input ellipsoid
-        a2: semi-major axis of output ellipsoid
-        f2: flattening of output ellipsoid
-        lat: array of latitudes in degrees
+    Parameters
+    ----------
+    a1: float
+        semi-major axis of input ellipsoid
+    f1: float
+        flattening of input ellipsoid
+    a2: float
+        semi-major axis of output ellipsoid
+    f2: float
+        flattening of output ellipsoid
+    lat: float
+        latitudes (degrees north)
 
-    Returns:
-        delta_h: difference in elevation for two ellipsoids
+    Returns
+    -------
+    delta_h: float
+        difference in elevation for two ellipsoids
 
-    Reference:
-        J Meeus, Astronomical Algorithms, pp. 77-82 (1991)
+    References
+    ----------
+    .. [1] J Meeus, Astronomical Algorithms, pp. 77-82 (1991)
     """
     #-- force phi into range -90 <= phi <= 90
     gt90, = np.nonzero((lat < -90.0) | (lat > 90.0))
@@ -211,8 +248,10 @@ def wrap_longitudes(lon):
     """
     Wraps longitudes to range from -180 to +180
 
-    Inputs:
-        lon: longitude (degrees east)
+    Parameters
+    ----------
+    lon: float
+        longitude (degrees east)
     """
     phi = np.arctan2(np.sin(lon*np.pi/180.0),np.cos(lon*np.pi/180.0))
     #-- convert phi from radians to degrees
@@ -222,16 +261,20 @@ def to_cartesian(lon,lat,h=0.0,a_axis=6378137.0,flat=1.0/298.257223563):
     """
     Converts geodetic coordinates to Cartesian coordinates
 
-    Inputs:
-        lon: longitude (degrees east)
-        lat: latitude (degrees north)
-
-    Options:
-        h: height above ellipsoid (or sphere)
-        a_axis: semimajor axis of the ellipsoid (default: WGS84)
-            * for spherical coordinates set to radius of the Earth
-        flat: ellipsoidal flattening (default: WGS84)
-            * for spherical coordinates set to 0
+    Parameters
+    ----------
+    lon: float
+        longitude (degrees east)
+    lat: float
+        latitude (degrees north)
+    h: float, default 0.0
+        height above ellipsoid (or sphere)
+    a_axis: float, default 6378137.0
+        semimajor axis of the ellipsoid
+        for spherical coordinates set to radius of the Earth
+    flat: float, default 1.0/298.257223563
+        ellipsoidal flattening
+        for spherical coordinates set to 0
     """
     #-- verify axes
     lon = np.atleast_1d(lon)
@@ -258,8 +301,14 @@ def to_sphere(x,y,z):
     """
     Convert from cartesian coordinates to spherical coordinates
 
-    Inputs:
-        x,y,z in cartesian coordinates
+    Parameters
+    ----------
+    x, float
+        cartesian x-coordinates
+    y, float
+        cartesian y-coordinates
+    z, float
+        cartesian z-coordinates
     """
     #-- calculate radius
     rad = np.sqrt(x**2.0 + y**2.0 + z**2.0)
@@ -284,16 +333,23 @@ def to_geodetic(x,y,z,a_axis=6378137.0,flat=1.0/298.257223563):
     Convert from cartesian coordinates to geodetic coordinates
     using a closed form solution
 
-    Inputs:
-        x,y,z in cartesian coordinates
+    Parameters
+    ----------
+    x, float
+        cartesian x-coordinates
+    y, float
+        cartesian y-coordinates
+    z, float
+        cartesian z-coordinates
+    a_axis: float, default 6378137.0
+        semimajor axis of the ellipsoid
+    flat: float, default 1.0/298.257223563
+        ellipsoidal flattening
 
-    Options:
-        a_axis: semimajor axis of the ellipsoid (default: WGS84)
-        flat: ellipsoidal flattening (default: WGS84)
-
-    References:
-        J Zhu "Exact conversion of Earth-centered, Earth-fixed
-            coordinates to geodetic coordinates"
+    References
+    ----------
+    .. [1] J Zhu "Exact conversion of Earth-centered, Earth-fixed
+        coordinates to geodetic coordinates"
         Journal of Guidance, Control, and Dynamics,
         16(2), 389--391, 1993
         https://arc.aiaa.org/doi/abs/10.2514/3.21016
@@ -341,21 +397,26 @@ def scale_areas(lat, flat=1.0/298.257223563, ref=70.0):
     Calculates area scaling factors for a polar stereographic projection
     including special case of at the exact pole
 
-    Inputs:
-        lat: latitude (degrees north)
+    Parameters
+    ----------
+    lat: float,
+        latitude (degrees north)
+    flat: float, default 1.0/298.257223563
+        ellipsoidal flattening
+    ref: float, default 70.0
+        reference latitude (true scale latitude)
 
-    Options:
-        flat: ellipsoidal flattening (default: WGS84)
-        ref: reference latitude (true scale latitude)
+    Returns
+    -------
+    scale: float
+        area scaling factors at input latitudes
 
-    Returns:
-        scale: area scaling factors at input latitudes
-
-    References:
-        Snyder, J P (1982) Map Projections used by the U.S. Geological Survey
-            Forward formulas for the ellipsoid.  Geological Survey Bulletin
-            1532, U.S. Government Printing Office.
-        JPL Technical Memorandum 3349-85-101
+    References
+    ----------
+    .. [1] Snyder, J P (1982) Map Projections used by the U.S. Geological Survey
+        Forward formulas for the ellipsoid.  Geological Survey Bulletin
+        1532, U.S. Government Printing Office.
+    .. [2] JPL Technical Memorandum 3349-85-101
     """
     #-- convert latitude from degrees to positive radians
     theta = np.abs(lat)*np.pi/180.0

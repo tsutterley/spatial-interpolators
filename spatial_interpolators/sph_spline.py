@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 sph_spline.py
-Written by Tyler Sutterley (01/2022)
+Written by Tyler Sutterley (05/2022)
 
 Interpolates a sparse grid over a sphere using spherical surface splines in
     tension following Wessel and Becker (2008)
@@ -26,9 +26,12 @@ OPTIONS:
     tension: tension to use in interpolation (greater than 0)
 
 PYTHON DEPENDENCIES:
-    numpy: Scientific Computing Tools For Python (https://numpy.org)
-    scipy: Scientific Tools for Python (https://docs.scipy.org/doc/)
-    cython: C-extensions for Python (http://cython.org/)
+    numpy: Scientific Computing Tools For Python
+        https://numpy.org
+    scipy: Scientific Tools for Python
+        https://docs.scipy.org/doc/
+    cython: C-extensions for Python
+        http://cython.org/
 
 REFERENCES:
     Wessel, P. and J. M. Becker, 2008, Interpolation using a generalized
@@ -36,6 +39,7 @@ REFERENCES:
         Geophysical Journal International, doi:10.1111/j.1365-246X.2008.03829.x
 
 UPDATE HISTORY:
+    Updated 05/2022: updated docstrings to numpy documentation format
     Updated 01/2022: added function docstrings
     Updated 09/2017: using rcond=-1 in numpy least-squares algorithms
     Updated 08/2016: using cythonized version of generalized Legendre function
@@ -51,21 +55,33 @@ def sph_spline(lon, lat, data, longitude, latitude, tension=0.):
     Interpolates a sparse grid over a sphere using spherical
     surface splines in tension
 
-    Arguments
-    ---------
-    lon: input longitude
-    lat: input latitude
-    data: input data
-    longitude: output longitude
-    latitude: output latitude
-
-    Keyword arguments
-    -----------------
-    tension: tension to use in interpolation (greater than 0)
+    Parameters
+    ----------
+    lon: float
+        input longitude
+    lat: float
+        input latitude
+    data: float
+        input data
+    longitude: float
+        output longitude
+    latitude: float
+        output latitude
+    tension: float, default 0.0
+        tension to use in interpolation
 
     Returns
     -------
-    output: interpolated data grid
+    output: float
+        interpolated data grid
+
+    References
+    ----------
+    .. [Wessel2008] P. Wessel, and J. M. Becker,
+        "Interpolation using a generalized Green's function for a
+        spherical surface spline in tension,"
+        *Geophysical Journal International*, 174(1), 21--28, (2008).
+        `doi: 10.1111/j.1365-246X.2008.03829.x <https://doi.org/10.1111/j.1365-246X.2008.03829.x>`_
     """
 
     #-- remove singleton dimensions

@@ -21,6 +21,7 @@ and spherical grids
     user_guide/barnes_objective.rst
     user_guide/biharmonic_spline.rst
     user_guide/compact_radial_basis.rst
+    user_guide/inpaint.rst
     user_guide/legendre.rst
     user_guide/radial_basis.rst
     user_guide/spatial.rst

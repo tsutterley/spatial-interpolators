@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 radial_basis.py
-Written by Tyler Sutterley (01/2022)
+Written by Tyler Sutterley (05/2022)
 
 Interpolates data using radial basis functions
 
@@ -37,8 +37,10 @@ OPTIONS:
         thin_plate: thin-plate spline
 
 PYTHON DEPENDENCIES:
-    numpy: Scientific Computing Tools For Python (https://numpy.org)
-    scipy: Scientific Tools for Python (https://docs.scipy.org/doc/)
+    numpy: Scientific Computing Tools For Python
+        https://numpy.org
+    scipy: Scientific Tools for Python
+        https://docs.scipy.org/doc/
 
 REFERENCES:
     R. L. Hardy, Multiquadric equations of topography and other irregular
@@ -47,6 +49,7 @@ REFERENCES:
         Computational Mathematics, 2003.
 
 UPDATE HISTORY:
+    Updated 05/2022: updated docstrings to numpy documentation format
     Updated 01/2022: added function docstrings
     Updated 07/2021: using scipy spatial distance routines
     Updated 09/2017: using rcond=-1 in numpy least-squares algorithms
@@ -67,33 +70,50 @@ def radial_basis(xs, ys, zs, XI, YI, smooth=0.0, metric='euclidean',
     """
     Interpolates data using radial basis functions
 
-    Arguments
-    ---------
-    xs: scaled input x-coordinates
-    ys: scaled input y-coordinates
-    zs: input data
-    XI: scaled output x-coordinates for data grid
-    YI: scaled output y-coordinates for data grid
+    Parameters
+    ----------
+    xs: float
+        scaled input x-coordinates
+    ys: float
+        scaled input y-coordinates
+    zs: float
+        input data
+    XI: float
+        scaled output x-coordinates for data grid
+    YI: float
+        scaled output y-coordinates for data grid
+    smooth: float, default 0.0
+        smoothing weights
+    metric: str, default 'euclidean'
+        distance metric to use
+    epsilon: float or NoneType, default None
+        adjustable constant for distance functions
+    method: str, default 'inverse'
+        radial basis function
 
-    Keyword arguments
-    -----------------
-    smooth: smoothing weights
-    metric: distance metric to use (default euclidean)
-    epsilon: adjustable constant for distance functions
-    method: radial basis function
-        - multiquadric
-        - inverse_multiquadric or inverse (default)
-        - inverse_quadratic
-        - gaussian
-        - linear (first-order polyharmonic spline)
-        - cubic (third-order polyharmonic spline)
-        - quintic (fifth-order polyharmonic spline)
-        - thin_plate: thin-plate spline
-    polynomial: polynomial order if augmenting radial basis functions
+        * ``'multiquadric'``
+        * ``'inverse_multiquadric'`` or ``'inverse'``
+        * ``'inverse_quadratic'``
+        * ``'gaussian'``
+        * ``'linear'``
+        * ``'cubic'``
+        * ``'quintic'``
+        * ``'thin_plate'``
+    polynomial: int or NoneType, default None
+        polynomial order if augmenting radial basis functions
 
     Returns
     -------
     ZI: interpolated data grid
+
+    References
+    ----------
+    .. [Hardy1971] R. L. Hardy,
+        "Multiquadric equations of topography and other irregular surfaces,"
+        *Journal of Geophysical Research*, 76(8), 1905-1915, (1971).
+        `doi: 10.1029/JB076i008p01905 <https://doi.org/10.1029/JB076i008p01905>`_
+    .. [Buhmann2003] M. Buhmann, "Radial Basis Functions",
+        *Cambridge Monographs on Applied and Computational Mathematics*, (2003).
     """
 
     #-- remove singleton dimensions

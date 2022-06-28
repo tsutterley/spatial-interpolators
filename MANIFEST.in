@@ -1,0 +1,8 @@
+prune .github*
+exclude *.yml
+include README.rst
+include LICENSE
+include requirements.txt
+include setup.cfg
+include setup.py
+include version.txt
