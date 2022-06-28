@@ -63,6 +63,20 @@ def inpaint(xs, ys, zs, n=100, s0=3, z0=None, power=2, epsilon=2):
         power for lambda function
     epsilon: int, default 2
         relaxation factor
+
+    .. [Garcia2010] D. Garcia, Robust smoothing of gridded data
+        in one and higher dimensions with missing values.
+        Computational Statistics & Data Analysis, 54(4),
+        1167--1178 (2010).
+        `doi: 10.1016/j.csda.2009.09.020 <https://doi.org/10.1016/j.csda.2009.09.020>`_
+
+    .. [Wang2012] G. Wang, D. Garcia, Y. Liu, R. de Jeu, and A. J. Dolman,
+        A three-dimensional gap filling method for large geophysical
+        datasets: Application to global satellite soil moisture
+        observations, Environmental Modelling & Software, 30,
+        139--142 (2012).
+        `doi: 10.1016/j.envsoft.2011.10.015 <https://doi.org/10.1016/j.envsoft.2011.10.015>`_
+
     """
 
     # find masked values
