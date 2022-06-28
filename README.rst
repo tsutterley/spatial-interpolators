@@ -8,6 +8,7 @@ spatial-interpolators
 |Documentation Status|
 |Binder|
 |Pangeo|
+|zenodo|
 
 .. |Language| image:: https://img.shields.io/pypi/pyversions/spatial-interpolators?color=green
    :target: https://www.python.org/
@@ -26,6 +27,9 @@ spatial-interpolators
 
 .. |Pangeo| image:: https://img.shields.io/static/v1.svg?logo=Jupyter&label=PangeoBinderAWS&message=us-west-2&color=orange
    :target: https://aws-uswest2-binder.pangeo.io/v2/gh/tsutterley/spatial-interpolators/master?urlpath=lab
+
+.. |zenodo| image:: https://zenodo.org/badge/140747492.svg
+   :target: https://zenodo.org/badge/latestdoi/140747492
 
 Functions to spatially interpolate data over Cartesian and spherical grids
 
