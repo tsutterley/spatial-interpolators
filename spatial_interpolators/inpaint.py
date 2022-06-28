@@ -43,6 +43,7 @@ def inpaint(xs, ys, zs, n=100, s0=3, z0=None, power=2, epsilon=2):
     """
     Inpaint over missing data in a two-dimensional array using a
     penalized least square method based on discrete cosine transforms
+    [Garcia2010]_ [Wang2012]_
 
     Parameters
     ----------
@@ -64,19 +65,19 @@ def inpaint(xs, ys, zs, n=100, s0=3, z0=None, power=2, epsilon=2):
     epsilon: int, default 2
         relaxation factor
 
+    References
+    ----------
     .. [Garcia2010] D. Garcia, Robust smoothing of gridded data
         in one and higher dimensions with missing values.
         Computational Statistics & Data Analysis, 54(4),
         1167--1178 (2010).
         `doi: 10.1016/j.csda.2009.09.020 <https://doi.org/10.1016/j.csda.2009.09.020>`_
-
     .. [Wang2012] G. Wang, D. Garcia, Y. Liu, R. de Jeu, and A. J. Dolman,
         A three-dimensional gap filling method for large geophysical
         datasets: Application to global satellite soil moisture
         observations, Environmental Modelling & Software, 30,
         139--142 (2012).
         `doi: 10.1016/j.envsoft.2011.10.015 <https://doi.org/10.1016/j.envsoft.2011.10.015>`_
-
     """
 
     # find masked values

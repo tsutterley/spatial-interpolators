@@ -4,7 +4,7 @@ sph_radial_basis.py
 
 - Interpolates data over a sphere using radial basis functions
 - QR factorization option to eliminate ill-conditioning
--
+
 Calling Sequence
 ################
 

@@ -2,7 +2,7 @@
 inpaint.py
 ==========
 
-- Inpaint over missing data in a two-dimensional array using a penalized least square method based on discrete cosine transforms [Garcia2010]_ [Wang2012]_
+- Inpaint over missing data in a two-dimensional array using a penalized least square method based on discrete cosine transforms
 
 Calling Sequence
 ################
