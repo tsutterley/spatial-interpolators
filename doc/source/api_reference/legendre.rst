@@ -16,7 +16,7 @@ Calling Sequence
 
 `Source code`__
 
-.. __: https://github.com/tsutterley/spatial-interpolators/blob/master/spatial_interpolators/legendre.py
+.. __: https://github.com/tsutterley/spatial-interpolators/blob/main/spatial_interpolators/legendre.py
 
 .. autofunction:: spatial_interpolators.legendre
 

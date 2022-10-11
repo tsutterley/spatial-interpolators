@@ -87,7 +87,7 @@ html_context = {
         ),
         (
             '<i class="fa fa-book fa-fw"></i> License',
-            f"{repository_url}/blob/master/LICENSE",
+            f"{repository_url}/blob/main/LICENSE",
         ),
     ],
 }

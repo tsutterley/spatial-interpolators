@@ -16,6 +16,6 @@ Calling Sequence
 
 `Source code`__
 
-.. __: https://github.com/tsutterley/spatial-interpolators/blob/master/spatial_interpolators/biharmonic_spline.py
+.. __: https://github.com/tsutterley/spatial-interpolators/blob/main/spatial_interpolators/biharmonic_spline.py
 
 .. autofunction:: spatial_interpolators.biharmonic_spline

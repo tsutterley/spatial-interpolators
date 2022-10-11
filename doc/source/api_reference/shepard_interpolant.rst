@@ -14,6 +14,6 @@ Calling Sequence
 
 `Source code`__
 
-.. __: https://github.com/tsutterley/spatial-interpolators/blob/master/spatial_interpolators/shepard_interpolant.py
+.. __: https://github.com/tsutterley/spatial-interpolators/blob/main/spatial_interpolators/shepard_interpolant.py
 
 .. autofunction:: spatial_interpolators.shepard_interpolant

@@ -4,7 +4,7 @@ Installation
 
 ``spatial-interpolators`` is available for download from the `GitHub repository <https://github.com/tsutterley/spatial-interpolators>`_,
 and the `Python Package Index (pypi) <https://pypi.org/project/spatial-interpolators/>`_,
-The contents of the repository can be download as a `zipped file <https://github.com/tsutterley/spatial-interpolators/archive/master.zip>`_  or cloned.
+The contents of the repository can be download as a `zipped file <https://github.com/tsutterley/spatial-interpolators/archive/main.zip>`_  or cloned.
 
 To use this repository, please fork into your own account and then clone onto your system:
 
@@ -34,7 +34,7 @@ Alternatively can install the ``spatial_interpolators`` utilities directly from 
 | |Binder| |Pangeo|
 
 .. |Binder| image:: https://mybinder.org/badge_logo.svg
-  :target: https://mybinder.org/v2/gh/tsutterley/spatial-interpolators/master
+  :target: https://mybinder.org/v2/gh/tsutterley/spatial-interpolators/main
 
 .. |Pangeo| image:: https://img.shields.io/static/v1.svg?logo=Jupyter&label=PangeoBinderAWS&message=us-west-2&color=orange
-  :target: https://aws-uswest2-binder.pangeo.io/v2/gh/tsutterley/spatial-interpolators/master?urlpath=lab
+  :target: https://aws-uswest2-binder.pangeo.io/v2/gh/tsutterley/spatial-interpolators/main?urlpath=lab

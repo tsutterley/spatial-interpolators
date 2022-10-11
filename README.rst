@@ -14,7 +14,7 @@ spatial-interpolators
    :target: https://www.python.org/
 
 .. |License| image:: https://img.shields.io/github/license/tsutterley/spatial-interpolators
-   :target: https://github.com/tsutterley/spatial-interpolators/blob/master/LICENSE
+   :target: https://github.com/tsutterley/spatial-interpolators/blob/main/LICENSE
 
 .. |PyPI Version| image:: https://img.shields.io/pypi/v/spatial-interpolators.svg
    :target: https://pypi.python.org/pypi/spatial-interpolators/
@@ -23,10 +23,10 @@ spatial-interpolators
    :target: https://spatial-interpolators.readthedocs.io/en/latest/?badge=latest
 
 .. |Binder| image:: https://mybinder.org/badge_logo.svg
-   :target: https://mybinder.org/v2/gh/tsutterley/spatial-interpolators/master
+   :target: https://mybinder.org/v2/gh/tsutterley/spatial-interpolators/main
 
 .. |Pangeo| image:: https://img.shields.io/static/v1.svg?logo=Jupyter&label=PangeoBinderAWS&message=us-west-2&color=orange
-   :target: https://aws-uswest2-binder.pangeo.io/v2/gh/tsutterley/spatial-interpolators/master?urlpath=lab
+   :target: https://aws-uswest2-binder.pangeo.io/v2/gh/tsutterley/spatial-interpolators/main?urlpath=lab
 
 .. |zenodo| image:: https://zenodo.org/badge/140747492.svg
    :target: https://zenodo.org/badge/latestdoi/140747492
@@ -47,7 +47,7 @@ Download
 | The program homepage is:
 | https://github.com/tsutterley/spatial-interpolators
 | A zip archive of the latest version is available directly at:
-| https://github.com/tsutterley/spatial-interpolators/archive/master.zip
+| https://github.com/tsutterley/spatial-interpolators/archive/main.zip
 
 Disclaimer
 ##########
