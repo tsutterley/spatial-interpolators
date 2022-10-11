@@ -6,7 +6,7 @@ Utilities for operating on spatial data
 
 `Source code`__
 
-.. __: https://github.com/tsutterley/spatial-interpolators/blob/master/spatial_interpolators/spatial.py
+.. __: https://github.com/tsutterley/spatial-interpolators/blob/main/spatial_interpolators/spatial.py
 
 General Methods
 ===============

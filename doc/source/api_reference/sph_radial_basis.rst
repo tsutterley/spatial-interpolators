@@ -15,6 +15,6 @@ Calling Sequence
 
 `Source code`__
 
-.. __: https://github.com/tsutterley/spatial-interpolators/blob/master/spatial_interpolators/sph_radial_basis.py
+.. __: https://github.com/tsutterley/spatial-interpolators/blob/main/spatial_interpolators/sph_radial_basis.py
 
 .. autofunction:: spatial_interpolators.sph_radial_basis

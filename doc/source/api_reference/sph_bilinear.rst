@@ -14,6 +14,6 @@ Calling Sequence
 
 `Source code`__
 
-.. __: https://github.com/tsutterley/spatial-interpolators/blob/master/spatial_interpolators/sph_bilinear.py
+.. __: https://github.com/tsutterley/spatial-interpolators/blob/main/spatial_interpolators/sph_bilinear.py
 
 .. autofunction:: spatial_interpolators.sph_bilinear

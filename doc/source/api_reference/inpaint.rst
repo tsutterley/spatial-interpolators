@@ -14,7 +14,7 @@ Calling Sequence
 
 `Source code`__
 
-.. __: https://github.com/tsutterley/spatial-interpolators/blob/master/spatial_interpolators/inpaint.py
+.. __: https://github.com/tsutterley/spatial-interpolators/blob/main/spatial_interpolators/inpaint.py
 
 .. autofunction:: spatial_interpolators.inpaint
 
