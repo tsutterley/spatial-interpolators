@@ -1,6 +1,6 @@
-=======================
-compact_radial_basis.py
-=======================
+====================
+compact_radial_basis
+====================
 
 - Interpolates data using compactly supported radial basis functions of minimal degree and sparse matrix algebra
 

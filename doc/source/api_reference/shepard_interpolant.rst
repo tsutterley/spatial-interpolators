@@ -1,6 +1,6 @@
-======================
-shepard_interpolant.py
-======================
+===================
+shepard_interpolant
+===================
 
 - Interpolates data by evaluating Shepard Interpolants based on inverse distances
 

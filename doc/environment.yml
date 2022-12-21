@@ -15,8 +15,7 @@ dependencies:
   - python>=3.6
   - scipy
   - sphinx
-  - sphinx-argparse
   - sphinx_rtd_theme
-  - texlive-core
   - pip:
+    - sphinx-argparse>=0.4
     - ..
