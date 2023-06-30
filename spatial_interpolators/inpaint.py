@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 u"""
-Inpaint.py
+inpaint.py
 Written by Tyler Sutterley (05/2022)
 Inpaint over missing data in a two-dimensional array using a
     penalized least square method based on discrete cosine

@@ -170,7 +170,7 @@ def SSST(x, P=0):
         Green's function
     """
     # floating point machine precision
-    eps = np.finfo(np.float).eps
+    eps = np.finfo(np.float64).eps
     if (P == 0):
         # use dilogarithm (Spence's function) if using splines without tension
         y = np.zeros_like(x)

@@ -141,7 +141,7 @@ def sph_radial_basis(lon, lat, data, longitude, latitude, smooth=0.,
     # size of new matrix
     if (np.ndim(longitude) > 1):
         nlon, nlat = np.shape(longitude)
-        sz = np.int(nlon*nlat)
+        sz = np.int64(nlon*nlat)
     else:
         sz = len(longitude)
 
@@ -375,7 +375,7 @@ def RBF_QR(theta, phi, epsilon, data, RBF):
     l = 0
     l_n = np.ceil(np.sqrt(n))-1
     # floating point machine precision
-    eps = np.finfo(np.float).eps
+    eps = np.finfo(np.float64).eps
     while (d < -np.log10(eps)):
         # create new variables for Y and B which will resize if (l > (l_n -1))
         lmax = np.max([l_n, l])
