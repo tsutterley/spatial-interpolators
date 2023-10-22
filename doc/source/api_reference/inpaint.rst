@@ -1,6 +1,6 @@
-==========
-inpaint.py
-==========
+=======
+inpaint
+=======
 
 - Inpaint over missing data in a two-dimensional array using a penalized least square method based on discrete cosine transforms
 

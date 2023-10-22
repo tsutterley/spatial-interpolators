@@ -100,68 +100,71 @@ def barnes_objective(xs, ys, zs, XI, YI, XR, YR, runs=3):
     .. [Daley1991] R. Daley, *Atmospheric data analysis*,
         Cambridge Press, New York.  (1991).
     """
-    #-- remove singleton dimensions
+    # remove singleton dimensions
     xs = np.squeeze(xs)
     ys = np.squeeze(ys)
     zs = np.squeeze(zs)
     XI = np.squeeze(XI)
     YI = np.squeeze(YI)
-    #-- size of new matrix
+    # size of new matrix
     if (np.ndim(XI) == 1):
         nx = len(XI)
     else:
-        nx,ny = np.shape(XI)
+        nx, ny = np.shape(XI)
 
-    #-- Check to make sure sizes of input arguments are correct and consistent
+    # Check to make sure sizes of input arguments are correct and consistent
     if (len(zs) != len(xs)) | (len(zs) != len(ys)):
         raise Exception('Length of X, Y, and Z must be equal')
     if (np.shape(XI) != np.shape(YI)):
         raise Exception('Size of XI and YI must be equal')
 
-    #-- square of Barnes smoothing lengths scale
+    # square of Barnes smoothing lengths scale
     xr2 = XR**2
     yr2 = YR**2
-    #-- allocate for output zp array
+    # allocate for output zp array
     zp = np.zeros_like(XI.flatten())
-    #-- first analysis
-    for i,XY in enumerate(zip(XI.flatten(),YI.flatten())):
+    # first analysis
+    for i, XY in enumerate(zip(XI.flatten(), YI.flatten())):
         dx = np.abs(xs - XY[0])
         dy = np.abs(ys - XY[1])
-        #-- calculate weights
+        # calculate weights
         w = np.exp(-dx**2/xr2 - dy**2/yr2)
         zp[i] = np.sum(zs*w)/sum(w)
 
-    #-- allocate for even and odd zp arrays if iterating
+    # allocate for even and odd zp arrays if iterating
     if (runs > 0):
-        zpEven = np.zeros_like(zs)
-        zpOdd = np.zeros_like(zs)
-    #-- for each run
+        zp_even = np.zeros_like(zs)
+        zp_odd = np.zeros_like(zs)
+
+    # for each run
     for n in range(runs):
-        #-- calculate even and odd zp arrays
-        for j,xy in enumerate(zip(xs,ys)):
+        # calculate even and odd zp arrays
+        for j, xy in enumerate(zip(xs, ys)):
             dx = np.abs(xs - xy[0])
             dy = np.abs(ys - xy[1])
-            #-- calculate weights
+            # calculate weights
             w = np.exp(-dx**2/xr2 - dy**2/yr2)
-            if ((n % 2) == 0):#-- even (% = modulus)
-                zpEven[j] = zpOdd[j] + np.sum((zs - zpOdd)*w)/np.sum(w)
-            else:#-- odd
-                zpOdd[j] = zpEven[j] + np.sum((zs - zpEven)*w)/np.sum(w)
-        #-- calculate zp for run n
-        for i,XY in enumerate(zip(XI.flatten(),YI.flatten())):
+            # differing weights for even and odd arrays
+            if ((n % 2) == 0):
+                zp_even[j] = zp_odd[j] + np.sum((zs - zp_odd)*w)/np.sum(w)
+            else:
+                zp_odd[j] = zp_even[j] + np.sum((zs - zp_even)*w)/np.sum(w)
+        # calculate zp for run n
+        for i, XY in enumerate(zip(XI.flatten(), YI.flatten())):
             dx = np.abs(xs - XY[0])
             dy = np.abs(ys - XY[1])
             w = np.exp(-dx**2/xr2 - dy**2/yr2)
-            if ((n % 2) == 0):#-- even (% = modulus)
-                zp[i] = zp[i] + np.sum((zs - zpEven)*w)/np.sum(w)
-            else:#-- odd
-                zp[i] = zp[i] + np.sum((zs - zpOdd)*w)/np.sum(w)
+            # differing weights for even and odd arrays
+            if ((n % 2) == 0):
+                zp[i] = zp[i] + np.sum((zs - zp_even)*w)/np.sum(w)
+            else:
+                zp[i] = zp[i] + np.sum((zs - zp_odd)*w)/np.sum(w)
 
-    #-- reshape to original dimensions
+    # reshape to original dimensions
     if (np.ndim(XI) != 1):
-        ZI = zp.reshape(nx,ny)
+        ZI = zp.reshape(nx, ny)
     else:
         ZI = zp.copy()
 
-    #-- return output matrix/array
+    # return output matrix/array
     return ZI

@@ -1,6 +1,6 @@
-===============
-sph_bilinear.py
-===============
+============
+sph_bilinear
+============
 
 - Interpolates data over a sphere using bilinear functions
 

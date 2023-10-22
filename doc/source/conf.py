@@ -78,7 +78,7 @@ html_theme_options = {}
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-repository_url = f"https://github.com/tsutterley/spatial-interpolators"
+repository_url = "https://github.com/tsutterley/spatial-interpolators"
 html_context = {
     "menu_links": [
         (
@@ -94,4 +94,5 @@ html_context = {
 
 # Load the custom CSS files (needs sphinx >= 1.6 for this to work)
 def setup(app):
+    """Load the custom CSS file"""
     app.add_css_file("style.css")

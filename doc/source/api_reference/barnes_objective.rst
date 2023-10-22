@@ -1,6 +1,6 @@
-===================
-barnes_objective.py
-===================
+================
+barnes_objective
+================
 
 - Optimally interpolates data using Barnes objective analysis using a successive corrections scheme
 

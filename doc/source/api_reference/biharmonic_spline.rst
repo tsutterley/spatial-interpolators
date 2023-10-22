@@ -1,6 +1,6 @@
-====================
-biharmonic_spline.py
-====================
+=================
+biharmonic_spline
+=================
 
 - Interpolates data using 2-dimensional biharmonic splines
 - Can use surface splines in tension

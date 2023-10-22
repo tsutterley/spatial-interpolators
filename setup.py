@@ -1,4 +1,3 @@
-import os
 import sys
 import logging
 from setuptools import setup, Extension, find_packages

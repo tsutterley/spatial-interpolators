@@ -6,8 +6,6 @@ spatial-interpolators
 |License|
 |PyPI Version|
 |Documentation Status|
-|Binder|
-|Pangeo|
 |zenodo|
 
 .. |Language| image:: https://img.shields.io/pypi/pyversions/spatial-interpolators?color=green
@@ -21,12 +19,6 @@ spatial-interpolators
 
 .. |Documentation Status| image:: https://readthedocs.org/projects/spatial-interpolators/badge/?version=latest
    :target: https://spatial-interpolators.readthedocs.io/en/latest/?badge=latest
-
-.. |Binder| image:: https://mybinder.org/badge_logo.svg
-   :target: https://mybinder.org/v2/gh/tsutterley/spatial-interpolators/main
-
-.. |Pangeo| image:: https://img.shields.io/static/v1.svg?logo=Jupyter&label=PangeoBinderAWS&message=us-west-2&color=orange
-   :target: https://aws-uswest2-binder.pangeo.io/v2/gh/tsutterley/spatial-interpolators/main?urlpath=lab
 
 .. |zenodo| image:: https://zenodo.org/badge/140747492.svg
    :target: https://zenodo.org/badge/latestdoi/140747492

@@ -44,8 +44,8 @@ PYTHON DEPENDENCIES:
 
 REFERENCES:
     Holger Wendland, "Piecewise polynomial, positive definite and compactly
-        supported radial functions of minimal degree." Advances in Computational
-        Mathematics, 1995.
+        supported radial functions of minimal degree." Advances in
+        Computational Mathematics, 1995.
     Holger Wendland, "Scattered Data Approximation", Cambridge Monographs on
         Applied and Computational Mathematics, 2005.
     Martin Buhmann, "Radial Basis Functions", Cambridge Monographs on
@@ -122,87 +122,89 @@ def compact_radial_basis(xs, ys, zs, XI, YI, dimension, order, smooth=0.,
         *Cambridge Monographs on Applied and Computational Mathematics*,
         (2005).
     """
-    #-- remove singleton dimensions
+    # remove singleton dimensions
     xs = np.squeeze(xs)
     ys = np.squeeze(ys)
     zs = np.squeeze(zs)
     XI = np.squeeze(XI)
     YI = np.squeeze(YI)
-    #-- size of new matrix
+    # size of new matrix
     if (np.ndim(XI) == 1):
         nx = len(XI)
     else:
-        nx,ny = np.shape(XI)
+        nx, ny = np.shape(XI)
 
-    #-- Check to make sure sizes of input arguments are correct and consistent
+    # Check to make sure sizes of input arguments are correct and consistent
     if (len(zs) != len(xs)) | (len(zs) != len(ys)):
-        raise Exception('Length of X, Y, and Z must be equal')
+        raise Exception('Length of input arrays must be equal')
     if (np.shape(XI) != np.shape(YI)):
-        raise Exception('Size of XI and YI must be equal')
+        raise Exception('Shape of output arrays must be equal')
 
-    #-- create python dictionary of compact radial basis function formulas
+    # create python dictionary of compact radial basis function formulas
     radial_basis_functions = {}
     # radial_basis_functions['buhmann'] = buhmann
     radial_basis_functions['wendland'] = wendland
     # radial_basis_functions['wu'] = wu
-    #-- check if formula name is listed
+    # check if formula name is listed
     if method in radial_basis_functions.keys():
         cRBF = radial_basis_functions[method]
     else:
-        raise ValueError("Method {0} not implemented".format(method))
+        raise ValueError(f"Method {method} not implemented")
 
-    #-- construct kd-tree for Data points
-    kdtree = scipy.spatial.cKDTree(list(zip(xs, ys)))
+    # construct kd-tree for Data points
+    kdtree = scipy.spatial.cKDTree(np.c_[xs, ys])
     if radius is None:
-        #-- quick nearest-neighbor lookup to calculate mean radius
-        ds,_ = kdtree.query(list(zip(xs, ys)), k=2)
+        # quick nearest-neighbor lookup to calculate mean radius
+        ds, _ = kdtree.query(np.c_[xs, ys], k=2)
         radius = 2.0*np.mean(ds[:, 1])
 
-    #-- Creation of data-data distance sparse matrix in COOrdinate format
-    Rd = kdtree.sparse_distance_matrix(kdtree, radius, output_type='coo_matrix')
-    #-- calculate ratio between data-data distance and radius
-    #-- replace cases where the data-data distance is greater than the radius
+    # Creation of data-data distance sparse matrix in COOrdinate format
+    Rd = kdtree.sparse_distance_matrix(kdtree, radius,
+        output_type='coo_matrix')
+    # calculate ratio between data-data distance and radius
+    # replace cases where the data-data distance is greater than the radius
     r0 = np.where(Rd.data < radius, Rd.data/radius, radius/radius)
-    #-- calculation of model PHI
+    # calculation of model PHI
     PHI = cRBF(r0, dimension, order)
-    #-- construct sparse radial matrix
-    PHI = scipy.sparse.coo_matrix((PHI, (Rd.row,Rd.col)), shape=Rd.shape)
-    #-- Augmentation of the PHI Matrix with a smoothing factor
+    # construct sparse radial matrix
+    PHI = scipy.sparse.coo_matrix((PHI, (Rd.row, Rd.col)), shape=Rd.shape)
+    # Augmentation of the PHI Matrix with a smoothing factor
     if (smooth != 0):
-        #-- calculate eigenvalues of distance matrix
+        # calculate eigenvalues of distance matrix
         eig = scipy.sparse.linalg.eigsh(Rd, k=1, which="LA", maxiter=1000,
             return_eigenvectors=False)[0]
         PHI += scipy.sparse.identity(len(xs), format='coo') * smooth * eig
 
-    #-- Computation of the Weights
+    # Computation of the Weights
     w = scipy.sparse.linalg.spsolve(PHI, zs)
 
-    #-- construct kd-tree for Mesh points
-    #-- Data to Mesh Points
-    mkdtree = scipy.spatial.cKDTree(list(zip(XI.flatten(),YI.flatten())))
-    #-- Creation of data-mesh distance sparse matrix in COOrdinate format
-    Re = kdtree.sparse_distance_matrix(mkdtree,radius,output_type='coo_matrix')
-    #-- calculate ratio between data-mesh distance and radius
-    #-- replace cases where the data-mesh distance is greater than the radius
+    # construct kd-tree for Mesh points
+    # Data to Mesh Points
+    mkdtree = scipy.spatial.cKDTree(np.c_[XI.flatten(), YI.flatten()])
+    # Creation of data-mesh distance sparse matrix in COOrdinate format
+    Re = kdtree.sparse_distance_matrix(mkdtree, radius,
+        output_type='coo_matrix')
+    # calculate ratio between data-mesh distance and radius
+    # replace cases where the data-mesh distance is greater than the radius
     R0 = np.where(Re.data < radius, Re.data/radius, radius/radius)
-    #-- calculation of the Evaluation Matrix
+    # calculation of the Evaluation Matrix
     E = cRBF(R0, dimension, order)
-    #-- construct sparse radial matrix
-    E = scipy.sparse.coo_matrix((E, (Re.row,Re.col)), shape=Re.shape)
+    # construct sparse radial matrix
+    E = scipy.sparse.coo_matrix((E, (Re.row, Re.col)), shape=Re.shape)
 
-    #-- calculate output interpolated array (or matrix)
+    # calculate output interpolated array (or matrix)
     if (np.ndim(XI) == 1):
-        ZI = E.transpose().dot(w[:,np.newaxis])
+        ZI = E.transpose().dot(w[:, np.newaxis])
     else:
-        ZI = np.zeros((nx,ny))
-        ZI[:,:] = E.transpose().dot(w[:,np.newaxis]).reshape(nx,ny)
-    #-- return the interpolated array (or matrix)
+        ZI = np.zeros((nx, ny))
+        ZI[:, :] = E.transpose().dot(w[:, np.newaxis]).reshape(nx, ny)
+    # return the interpolated array (or matrix)
     return ZI
 
-#-- define compactly supported radial basis function formulas
-def wendland(r,d,k):
-    #-- Wendland functions of dimension d and order k
-    #-- can replace with recursive method of Wendland for generalized case
+# define compactly supported radial basis function formulas
+def wendland(r, d, k):
+    # Wendland functions of dimension d and order k
+    # can replace with recursive method of Wendland for generalized case
     L = (d//2) + k + 1
     if (k == 0):
         f = (1. - r)**L

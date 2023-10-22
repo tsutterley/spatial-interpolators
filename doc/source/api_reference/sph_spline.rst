@@ -1,6 +1,6 @@
-=============
-sph_spline.py
-=============
+==========
+sph_spline
+==========
 
 - Interpolates data over a sphere using spherical surface splines in tension
 

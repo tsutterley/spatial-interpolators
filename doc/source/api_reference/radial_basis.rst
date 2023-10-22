@@ -1,6 +1,6 @@
-===============
-radial_basis.py
-===============
+============
+radial_basis
+============
 
 - Interpolates data using radial basis functions
 

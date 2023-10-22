@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 u"""
-Inpaint.py
+inpaint.py
 Written by Tyler Sutterley (05/2022)
 Inpaint over missing data in a two-dimensional array using a
     penalized least square method based on discrete cosine
@@ -70,14 +70,14 @@ def inpaint(xs, ys, zs, n=100, s0=3, z0=None, power=2, epsilon=2):
     .. [Garcia2010] D. Garcia, Robust smoothing of gridded data
         in one and higher dimensions with missing values.
         Computational Statistics & Data Analysis, 54(4),
-        1167--1178 (2010).
-        `doi: 10.1016/j.csda.2009.09.020 <https://doi.org/10.1016/j.csda.2009.09.020>`_
+        1167--1178 (2010). `doi: 10.1016/j.csda.2009.09.020
+        <https://doi.org/10.1016/j.csda.2009.09.020>`_
     .. [Wang2012] G. Wang, D. Garcia, Y. Liu, R. de Jeu, and A. J. Dolman,
         A three-dimensional gap filling method for large geophysical
         datasets: Application to global satellite soil moisture
         observations, Environmental Modelling & Software, 30,
-        139--142 (2012).
-        `doi: 10.1016/j.envsoft.2011.10.015 <https://doi.org/10.1016/j.envsoft.2011.10.015>`_
+        139--142 (2012). `doi: 10.1016/j.envsoft.2011.10.015
+        <https://doi.org/10.1016/j.envsoft.2011.10.015>`_
     """
 
     # find masked values
@@ -90,11 +90,11 @@ def inpaint(xs, ys, zs, n=100, s0=3, z0=None, power=2, epsilon=2):
         raise ValueError('No valid values found')
 
     # dimensions of input grid
-    ny,nx = np.shape(zs)
+    ny, nx = np.shape(zs)
     # calculate lambda function
-    L = np.zeros((ny,nx))
-    L += np.broadcast_to(np.cos(np.pi*np.arange(ny)/ny)[:,None],(ny,nx))
-    L += np.broadcast_to(np.cos(np.pi*np.arange(nx)/nx)[None,:],(ny,nx))
+    L = np.zeros((ny, nx))
+    L += np.broadcast_to(np.cos(np.pi*np.arange(ny)/ny)[:, None], (ny, nx))
+    L += np.broadcast_to(np.cos(np.pi*np.arange(nx)/nx)[None, :], (ny, nx))
     LAMBDA = np.power(2.0*(2.0 - L), power)
 
     # calculate initial values using nearest neighbors
@@ -102,7 +102,7 @@ def inpaint(xs, ys, zs, n=100, s0=3, z0=None, power=2, epsilon=2):
         z0 = nearest_neighbors(xs, ys, zs, W)
 
     # copy data to new array with 0 values for mask
-    ZI = np.zeros((ny,nx))
+    ZI = np.zeros((ny, nx))
     ZI[W] = np.copy(z0[W])
 
     # smoothness parameters
@@ -139,7 +139,7 @@ def nearest_neighbors(xs, ys, zs, W):
     """
     # computation of distance Matrix
     # use scipy spatial KDTree routines
-    xgrid,ygrid = np.meshgrid(xs, ys)
+    xgrid, ygrid = np.meshgrid(xs, ys)
     tree = scipy.spatial.cKDTree(np.c_[xgrid[W], ygrid[W]])
     # find nearest neighbors
     masked = np.logical_not(W)

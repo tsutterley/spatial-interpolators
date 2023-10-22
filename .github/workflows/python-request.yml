@@ -12,31 +12,31 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-latest]
-        python-version: [3.6, 3.7, 3.8]
+        os: [ubuntu-latest, macos-latest]
+        python-version: [3.11]
     env:
       OS: ${{ matrix.os }}
       PYTHON: ${{ matrix.python-version }}
+    defaults:
+      run:
+        shell: bash -l {0}
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+    - uses: actions/checkout@v4
+    - name: Set up mamba ${{ matrix.python-version }}
+      uses: mamba-org/setup-micromamba@v1
       with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies for Linux
-      if: matrix.os == 'ubuntu-20.04'
-      run: |
-        sudo apt-get update
-        pip install --upgrade pip
-        pip install flake8 pytest pytest-cov
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Install dependencies for MacOS
-      if: matrix.os == 'macos-latest'
-      run: |
-        pip install --upgrade pip
-        pip install flake8 pytest pytest-cov
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        micromamba-version: 'latest'
+        environment-file: environment.yml
+        init-shell: bash
+        environment-name: spatial-interpolators
+        cache-environment: true
+        post-cleanup: 'all'
+        create-args: >-
+          python=${{ matrix.python-version }}
+          flake8
+          pytest
+          pytest-cov
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
